@@ -1,16 +1,11 @@
 // Update with your config settings.
+const dbSettings = require("./config/db");
 
 module.exports = {
 
   development: {
     client: 'pg',
-    connection: {
-      host:     settings.hostname,
-      database: settings.database,
-      user:     settings.user,
-      password: settings.password,
-      ssl:      true
-    },
+    connection: dbSettings,
     pool: {
       min: 2,
       max: 10

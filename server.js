@@ -6,6 +6,11 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const dbSettings = require("./config/db")
+const knex = require('knex')({
+  client: 'pg',
+  connection: dbSettings
+});
 
 const settings = require("./data-files/settings");
 const knex = require('knex')({
@@ -38,10 +43,13 @@ app.use(express.static("public"));
 
 // homepage
 app.get("/", (req, res) => {
-  // res.send("Hello world");
   console.log("Hello world");
   res.render("login");
 });
+
+// user registration
+
+// login & logout
 
 // users page
 app.get("/users", (req, res) => {
