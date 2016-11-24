@@ -30,7 +30,7 @@ app.use(express.static("public"));
 // homepage
 app.get("/", (req, res) => {
   console.log("Hello world");
-  res.render("login");
+  res.render("map");
 });
 
 // temp route for map development purposes for Behzad

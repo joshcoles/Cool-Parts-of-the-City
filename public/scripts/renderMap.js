@@ -13,4 +13,8 @@ function renderMap(){
 
   google.maps.event.addListener(marker, 'dragend', getCoordinatesOnEvent);
 
+  // map.addListener('click', function(e) {
+  //         placeMarkerAndPanTo(e.latLng, map);
+  //        });
+
 }
