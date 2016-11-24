@@ -30,10 +30,11 @@ app.use(express.static("public"));
 // homepage
 app.get("/", (req, res) => {
   console.log("Hello world");
-  res.render("map");
+  res.render("renderMap");
 });
 
 // temp route for map development purposes for Behzad
+
 app.get("/renderMap", (req, res) => {
   res.render("renderMap");
 });
@@ -48,6 +49,7 @@ app.post("/users/:username/create", (req, res) => {
   console.log('success on server');
   console.log(req.body);
   res.send("success");
+
 });
 
 // user registration
