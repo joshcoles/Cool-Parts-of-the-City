@@ -1,0 +1,26 @@
+{
+  "name": "midterm-project",
+  "version": "1.0.0",
+  "description": "cool spots",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckwjdals90/lhl-midterm-project.git"
+  },
+  "author": "Jungmin, Josh, Behzad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ckwjdals90/lhl-midterm-project/issues"
+  },
+  "homepage": "https://github.com/ckwjdals90/lhl-midterm-project#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-alpha.2",
+    "express": "^4.14.0",
+    "knex": "^0.12.6"
+  }
+}
