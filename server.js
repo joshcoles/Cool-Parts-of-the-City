@@ -34,8 +34,20 @@ app.get("/", (req, res) => {
 });
 
 // temp route for map development purposes for Behzad
-app.get("/map", (req, res) => {
-  res.render("map");
+app.get("/renderMap", (req, res) => {
+  res.render("renderMap");
+});
+
+// temp route for map development purposes for Behzad
+app.get("/createNewMap", (req, res) => {
+  res.render("createNewMap");
+});
+
+// temp route for map development purposes for Behzad
+app.post("/users/:username/create", (req, res) => {
+  console.log('success on server');
+  console.log(req.body);
+  res.send("success");
 });
 
 // user registration

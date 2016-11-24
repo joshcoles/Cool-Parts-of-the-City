@@ -7,5 +7,6 @@ function insertPointsOnMap (myMap, lat, lng) {
     };
     var marker = new google.maps.Marker(markerOptions);
     marker.setMap(myMap);
+    setUpEventListenenrs(marker);
     return marker;
 }
