@@ -6,6 +6,16 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const knex = require('knex')({
+  client: 'pg',
+  connection: {
+    host : settings.hostname,
+    user : settings.user,
+    password : settings.password,
+    database : settings.database,
+    ssl: true
+  }
+});
 
 app.use(bodyParser.urlencoded({
   extended:true
@@ -26,10 +36,13 @@ app.use(express.static("public"));
 
 // homepage
 app.get("/", (req, res) => {
-  //res.send('./behzadsTestForlder/test.html');
-  //console.log("Hello world");
-  res.render('test');
+  console.log("Hello world");
+  res.render("login");
 });
+
+// user registration
+
+// login & logout
 
 // users page
 app.get("/users", (req, res) => {
