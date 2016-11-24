@@ -7,6 +7,18 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 
+const settings = require("./data-files/settings");
+const knex = require('knex')({
+  client: 'pg',
+  connection: {
+    host : settings.hostname,
+    user : settings.user,
+    password : settings.password,
+    database : settings.database,
+    ssl: true
+  }
+});
+
 app.use(bodyParser.urlencoded({
   extended:true
 }));
