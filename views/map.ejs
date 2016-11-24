@@ -29,12 +29,12 @@
 
         function initMap() {
           map = createMap(49.2812,-123.1105, 14);
-          insertPointsOnMap(map, 49.2812,-123.1105);
+          // insertPointsOnMap(map, 49.2812,-123.1105);
+          map.addListener('click', function(e) {
+          placeMarkerAndPanTo(e.latLng, map);
+         });
         }
 
-        document.addEventListener("DOMContentLoaded", function(event) {
-          //initMap();
-        });
 
       </script>
 
@@ -44,6 +44,8 @@
       <script src="/scripts/createMap.js"></script>
       <script src="/scripts/insertPointOnMap.js"></script>
       <script src="/scripts/renderMap.js"></script>
+      <script src="/scripts/placeMarkerAndPanTo.js"></script>
+
     </div>
 
   </body>

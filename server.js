@@ -12,18 +12,6 @@ const knex = require('knex')({
   connection: dbSettings
 });
 
-const settings = require("./data-files/settings");
-const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host : settings.hostname,
-    user : settings.user,
-    password : settings.password,
-    database : settings.database,
-    ssl: true
-  }
-});
-
 app.use(bodyParser.urlencoded({
   extended:true
 }));
@@ -44,7 +32,7 @@ app.use(express.static("public"));
 // homepage
 app.get("/", (req, res) => {
   console.log("Hello world");
-  res.render("login");
+  res.render("map");
 });
 
 // user registration
