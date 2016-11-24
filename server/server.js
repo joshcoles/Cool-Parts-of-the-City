@@ -26,8 +26,9 @@ app.use(express.static("public"));
 
 // homepage
 app.get("/", (req, res) => {
-  res.send("Hello world");
-  console.log("Hello world");
+  //res.send('./behzadsTestForlder/test.html');
+  //console.log("Hello world");
+  res.render('test');
 });
 
 // users page
