@@ -24,26 +24,15 @@
   <body>
 
     <div id="map">
-      <script>
-        var map;
-
-        function initMap() {
-          map = createMap(49.2812,-123.1105, 14);
-          insertPointsOnMap(map, 49.2812,-123.1105);
-        }
-
-        document.addEventListener("DOMContentLoaded", function(event) {
-          //initMap();
-        });
-
-      </script>
-
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=initMap"
-      async defer></script>
 
       <script src="/scripts/createMap.js"></script>
       <script src="/scripts/insertPointOnMap.js"></script>
+      <script src="/scripts/getCoordinatesOnEvent.js"></script>
       <script src="/scripts/renderMap.js"></script>
+
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=renderMap"
+      async defer></script>
+
     </div>
 
   </body>
