@@ -8,5 +8,3 @@ function createMap (lat, lng, zoomLevel) {
   };
   return new google.maps.Map(document.getElementById('map'), mapOptions);
 }
-
-// module.exports = createMap;

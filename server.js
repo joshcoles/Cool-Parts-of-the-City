@@ -27,11 +27,14 @@ app.use(express.static("public"));
 
 
 
-
-
 // homepage
 app.get("/", (req, res) => {
   console.log("Hello world");
+  res.render("map");
+});
+
+// temp route for map development purposes for Behzad
+app.get("/map", (req, res) => {
   res.render("map");
 });
 
@@ -42,28 +45,28 @@ app.get("/", (req, res) => {
 // users page
 app.get("/users", (req, res) => {
 
-})
+});
 
 // user page
 app.get("/users/:id", (req, res) => {
 
-})
+});
 
 //
 app.get("/users/:id/", (req, res) => {
 
-})
+});
 
 // create new post
 
 // edit post
 app.post("/users/:id/:postid", (req, res) => {
 
-})
+});
 
 //
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
-})
+});
 
