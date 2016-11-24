@@ -6,7 +6,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
-const dbSettings = require("./config/db")
+const dbSettings = require("./config/db");
 const knex = require('knex')({
   client: 'pg',
   connection: dbSettings

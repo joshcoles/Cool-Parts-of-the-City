@@ -15,8 +15,8 @@
     });
   });
 
-  coordinatesRoutes.post("", (req, res) => {
-    if (!coordinate-data?) {
+  coordinatesRoutes.post("/users/:username/create", (req, res) => {
+    if (!req.body) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
