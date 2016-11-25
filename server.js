@@ -187,6 +187,12 @@ app.post("/users/:id/:postid", (req, res) => {
 });
 
 
+app.post("/markers", (req, res) => {
+  // Create.marker(res.body)
+
+  res.send({sent: 'from server'});
+});
+
 // app.get("/users/:username/create", (req, res) => {
 //   res.render('createNewMap');
 //   //console.log(req.body);

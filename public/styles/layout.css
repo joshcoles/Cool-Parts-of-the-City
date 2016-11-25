@@ -11,3 +11,12 @@ html, body {
 }
 
 
+
+
+.info-window-form {
+  display: none;
+}
+
+#map .info-window-form {
+  display: block;
+}
