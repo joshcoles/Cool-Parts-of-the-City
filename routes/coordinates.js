@@ -6,7 +6,6 @@
  module.exports = function(dataHelpers) {
 
   coordinatesRoutes.get("/", (req, res) => {
-
     dataHelpers.getCoordinates((err, coordinates) => {
       if(err) {
         res.status(500).json({ error: err.message });
