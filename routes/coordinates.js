@@ -5,15 +5,16 @@
 
  module.exports = function(dataHelpers) {
 
-  // coordinatesRoutes.get("", (req, res) => {
-  //   dataHelpers.getCoordinates((err, coordinates) => {
-  //     if(err) {
-  //       res.status(500).json({ error: err.message });
-  //     } else {
-  //       res.json(coordinates);
-  //     }
-  //   });
-  // });
+  coordinatesRoutes.get("/", (req, res) => {
+
+    dataHelpers.getCoordinates((err, coordinates) => {
+      if(err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        res.json(coordinates);
+      }
+    });
+  });
 
   coordinatesRoutes.post("/users/:username/create", (req, res) => {
     if (!req.body) {

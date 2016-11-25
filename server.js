@@ -46,9 +46,11 @@ app.get("/createNewMap", (req, res) => {
 
 // temp route for map development purposes for Behzad
 app.post("/users/:username/create", (req, res) => {
+
   console.log('success on server');
   console.log(req.body);
   res.send("success");
+
 
 });
 
