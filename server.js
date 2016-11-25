@@ -6,7 +6,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
-const dbSettings = require("./config/db")
+const dbSettings = require("./config/db");
 const knex = require('knex')({
   client: 'pg',
   connection: dbSettings
@@ -78,7 +78,19 @@ app.post("/users/:id/:postid", (req, res) => {
 
 });
 
-//
+
+
+
+const dataHelper = require("./lib/data-helper.js")();
+const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
+
+app.use("/users/:username/create", coordinatesRoutes);
+
+
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
