@@ -1,21 +1,35 @@
 <nav class="navbar navbar-default navbar-fixed-top navbar-danger">
     <div class="container">
       <!-- <p class="navbar-text navbar-right">Test</p> -->
-      <button type="button" class="btn btn-default navbar-btn ">
-        <a href="/users/:id">
-          My Maps
-        </a>
-      </button>
-      <button type="button" class="btn btn-default navbar-btn ">
-        <a href="/users/josh/create">
-          Create
-        </a>
-      </button>
+
+      <!-- if not logged in, then-->
+      <% if (username) { %>
+        <button type="button" class="btn btn-default navbar-btn ">
+          <a href="/users/:id">
+            My Maps
+          </a>
+        </button>
+        <button type="button" class="btn btn-default navbar-btn ">
+          <a href="/users/josh/create">
+            Create
+          </a>
+        </button>
+        <button type="button" class="btn btn-default navbar-btn navbar-right">
+          <a href="/logout">
+            Sign Out
+          </a>
+        </button>
+      <!-- else (if logged in) -->
+      <% } else { %>
+
+      <% } %>
       <button type="button" class="btn btn-default navbar-btn navbar-right">
         <a href="/">
           Sign In
         </a>
       </button>
+
+
 
     <!-- <a href="/urls/new">Create</a> -->
 
