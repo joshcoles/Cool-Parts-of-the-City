@@ -73,6 +73,10 @@ app.post("/users/:username/create", (req, res) => {
 // });
 
 // user registration
+app.get("/register", (req, res) => {
+  res.render("register")
+});
+
 
 // login & logout
 
