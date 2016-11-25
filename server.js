@@ -6,6 +6,9 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
 const dbSettings = require("./config/db");
 const knex = require('knex')({
   client: 'pg',
@@ -75,8 +78,85 @@ app.post("/users/:username/create", (req, res) => {
 // });
 
 // user registration
+app.get("/register", (req, res) => {
+  res.render("register");
+});
 
+app.post("/register", (req, res) => {
+  const input = req.body;
+
+  var unavailableUsername = "";
+  if (knex.select('*').from('users').where('username', '=', req.body.username)) {
+    unavailableUsername = req.body.username;
+  }
+  var unavailableEmail = "";
+  if (knex.select('*').from('users').where('username', '=', req.body.email)) {
+    unavailableEmail = req.body.email;
+  }
+
+  if (input.email === "" || input.username === "" || input.password === "") {
+    res.status(400).send("You are missing some inputs man")
+  } else if (unavailableUsername === input.username) {
+    res.status(400).send("Username unavaileble")
+  } else if (unavailableEmail === input.email) {
+    res.status(400).send("Email unavailable")
+  } else {
+    let enteredUsername   = input.username;
+    let enteredEmail      = input.email;
+    let enteredPassword   = input.password;
+    bcrypt.hash(enteredPassword, saltRounds, (err, hash) => {
+      const newUser = {
+        username: enteredUsername,
+        email:    enteredEmail,
+        password: hash
+      };
+      knex.insert(newUser).into('users').asCallback(function (err, rows) {
+        if (err) { console.log (err); throw err; }
+      });
+    })
+    res.redirect("/");
+  }
+
+});
 // login & logout
+app.get("/", (req, res) => {
+  res.render("login");
+});
+
+app.post("/", (req, res) => {
+  const input = req.body
+  var usernameFound    = "";
+  var passwordFound = "";
+
+  if (knex.select('*').from('users').where('username', '=', input.username)) {
+    usernameFound = this.username;
+    passwordFound = this.password;
+  }
+
+  if (input.username === usernameFound) {
+    console.log("email found in the db");
+    bcrypt.compare(input.password, passwordFound, (err, passwordMatch) => {
+      if (passwordMatch) {
+        req.session.username = input.username;
+        res.redirect(`/users/${input.username}`);
+        return;
+      }else {
+        console.log("wrong password");
+        res.status(401).send("Invalid username or password");
+        return;
+      }
+    })
+  }else {
+    console.log("username not found");
+    res.status(401).send("Invalid username or password");
+    return;
+  }
+});
+
+app.post("/logout", (req, res) => {
+  req.session.username = undefined;
+});
+
 
 // users page
 app.get("/users", (req, res) => {
