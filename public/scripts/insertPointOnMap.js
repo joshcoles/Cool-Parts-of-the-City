@@ -10,7 +10,7 @@ function insertPointsOnMap (myMap, lat, lng) {
       content: 'test'
     }
 
-    debugger;
+    // debugger;
     var marker = new google.maps.Marker(markerOptions);
     marker.setMap(myMap);
     console.log(myMap);
@@ -23,7 +23,7 @@ function insertPointsOnMap (myMap, lat, lng) {
       infoWindow.open(myMap, marker);
     });
 
-    setUpEventListeneners(marker);
+    // setUpEventListeneners(marker);
 
     return marker;
 }
