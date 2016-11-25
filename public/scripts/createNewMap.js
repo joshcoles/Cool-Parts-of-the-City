@@ -12,12 +12,15 @@ function createNewMap () {
 
   map.addListener('click', function(e) {
     placeMarkerAndPanTo(e.latLng, map);
+    // points.push(e.latLng);
     points.push({
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
     });
-    console.log(points);
+
   });
+
+  autoCompleteSearch(map);
 
   return map;
 }

@@ -16,8 +16,6 @@ const knex = require('knex')({
 });
 
 
-var x = [];
-
 app.use(bodyParser.urlencoded({
   extended:true
 }));
@@ -235,8 +233,6 @@ app.post("/users/:id/:postid", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-
 
 
 function emptyDataTables (dataTable) {
