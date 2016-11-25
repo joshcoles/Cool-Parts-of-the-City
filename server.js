@@ -53,10 +53,12 @@ app.post("/users/:username/create", (req, res) => {
     center_x: req.body.mapCenterLat,
     center_y: req.body.mapCenterLng,
     user_id: null,
-    zoom: req.body.mapZoom
+    zoom: req.body.mapZoom,
+    region: 'a region',
+    keyword: 'a keyword'
   };
   knex('maps').insert(template).asCallback(function (err, rows) {
-    if (err) console.log (err);
+    if (err) { console.log (err); throw err; }
   });
 
   knex('maps').select().asCallback(function (err, rows) {
