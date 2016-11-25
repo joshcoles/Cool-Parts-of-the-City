@@ -10,7 +10,7 @@ $(function () {
       mapZoom: map.getZoom(),
       mapPoints: points
     }
-    console.log(templateVars.mapPoints);
+    console.log("BEFORE: ", templateVars);
 
     $.ajax({
       type: 'POST',

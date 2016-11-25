@@ -9,6 +9,7 @@ function drawMap (lat, lng, zoomLevel, pointsArr) {
 
   pointsArr.forEach((item) => {
     insertPointsOnMap (map, item.latitude, item.longitude);
+    // insertPointsOnMap (map, item.lat, item.lng);
   });
 
   return map;
