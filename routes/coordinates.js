@@ -5,15 +5,15 @@
 
  module.exports = function(dataHelpers) {
 
-  coordinatesRoutes.get("", (req, res) => {
-    dataHelpers.getCoordinates((err, coordinates) => {
-      if(err) {
-        res.status(500).json({ error: err.message });
-      } else {
-        res.json(coordinates);
-      }
-    });
-  });
+  // coordinatesRoutes.get("", (req, res) => {
+  //   dataHelpers.getCoordinates((err, coordinates) => {
+  //     if(err) {
+  //       res.status(500).json({ error: err.message });
+  //     } else {
+  //       res.json(coordinates);
+  //     }
+  //   });
+  // });
 
   coordinatesRoutes.post("/users/:username/create", (req, res) => {
     if (!req.body) {
@@ -21,19 +21,25 @@
       return;
     }
 
-    const coordinates = [{
-        latitude: ???,
-        longitude: ???,
-        map_id: ???
-      }]
+    const maps = {
+      mapsData: [{
+        center_x: req.body.mapCenterLng,
+        center_y: req.body.mapCenterLat,
+        zoom: req.body.mapZoom
+      }],
 
-    dataHelpers.saveCoordinates(coordinates, (err) => {
+      coordinatesData: req.body.mapPoints
+    }
+
+    dataHelpers.saveMaps(maps, (err) => {
       if (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ err: err.message });
       } else {
         res.status(201).send();
       }
-    });
+    })
+
+
   });
 
   return coordinatesRoutes;

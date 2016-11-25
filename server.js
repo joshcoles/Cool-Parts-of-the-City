@@ -64,7 +64,19 @@ app.post("/users/:id/:postid", (req, res) => {
 
 });
 
-//
+
+
+
+const dataHelper = require("./lib/data-helper.js")();
+const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
+
+app.use("/users/:username/create", coordinatesRoutes);
+
+
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
