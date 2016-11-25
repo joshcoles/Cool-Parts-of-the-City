@@ -40,7 +40,7 @@ app.get("/renderMap", (req, res) => {
 });
 
 // temp route for map development purposes for Behzad
-app.get("/create", (req, res) => {
+app.get("/users/:username/create", (req, res) => {
   res.render("createNewMap");
 });
 
@@ -53,6 +53,10 @@ app.post("/users/:username/create", (req, res) => {
 });
 
 // user registration
+app.get("/register", (req, res) => {
+  res.render("register")
+});
+
 
 // login & logout
 
