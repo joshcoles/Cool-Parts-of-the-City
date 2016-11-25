@@ -3,6 +3,7 @@
 
 function renderMap(){
   let data = JSON.parse(window.data);
+  console.log("AFTER: ", data);
   var map = drawMap(data.mapData.center_x,
                 data.mapData.center_y,
                 data.mapData.zoom,

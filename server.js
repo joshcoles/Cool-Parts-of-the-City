@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
 app.get("/renderMap", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 47)
+  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 54)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
@@ -59,6 +59,15 @@ app.get("/renderMap", (req, res) => {
 
 });
 
+// temp reoute for development purposes for Behzad
+app.get("/listMaps", (req, res) => {
+  knex('maps').select('id', 'keyword').asCallback((err, rows) => {
+    if (err) throw err;
+    //console.log(rows);
+    res.render("listMaps", {data: rows});
+  });
+
+});
 
 app.get("/users/:username/create", (req, res) => {
   res.render("createNewMap");
@@ -198,8 +207,6 @@ app.get("/users/:id", (req, res) => {
 app.get("/users/:id/", (req, res) => {
 
 });
-
-// create new post
 
 // edit post
 app.post("/users/:id/:postid", (req, res) => {
