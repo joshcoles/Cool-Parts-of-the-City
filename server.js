@@ -40,18 +40,12 @@ app.get("/", (req, res) => {
 
 // temp route for map development purposes for Behzad
 app.get("/users/:username/create", (req, res) => {
-  knex('coordinates').select().asCallback(function (err, rows) {
-    if (err) throw err;
-    else console.log(rows);
-  });
   res.render("createNewMap");
 });
 
 // temp route for map development purposes for Behzad
 app.post("/users/:username/create", (req, res) => {
   console.log('success on server');
-  console.log(req.body);
-  //res.send("success");
   let mapTemplate = {
     center_x: req.body.mapCenterLat,
     center_y: req.body.mapCenterLng,
@@ -75,20 +69,46 @@ app.post("/users/:username/create", (req, res) => {
   // });
 
 
-  knex('maps').insert(mapTemplate).returning('id').then( (id) => {
-    mapPoints.forEach((item) => {
-      let pointTemplate = {
-        longitude: item.lng,
-        latitude: item.lat,
-        map_id: parseInt(id)
-      };
-      knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
-        if (err) throw err;
-        else console.log(rows);
+  knex('maps').insert(mapTemplate).returning('id')
+    .then( (id) => {
+      mapPoints.forEach((item) => {
+        let pointTemplate = {
+          longitude: item.lng,
+          latitude: item.lat,
+          map_id: parseInt(id)
+        };
+        knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
+          if (err) throw err;
+        });
       });
+    })
+    .asCallback(function (err, rows) {
+      if (err) throw err;
+      // else console.log("WHAT WHAT");
     });
 
-  });
+
+
+
+  // then( (id) => {
+  //   mapPoints.forEach((item) => {
+  //     let pointTemplate = {
+  //       longitude: item.lng,
+  //       latitude: item.lat,
+  //       map_id: parseInt(id)
+  //     };
+  //   });
+  // });
+
+  // knex('maps').select().asCallback(function (err, rows) {
+  //   if (err) console.log(err);
+  //   else console.log(rows);
+  // });
+
+  // knex('coordinates').select().asCallback(function (err, rows) {
+  //   if (err) throw err;
+  //   else console.log(rows);
+  // });
 
 });
 
