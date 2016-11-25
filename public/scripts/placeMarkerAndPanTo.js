@@ -8,10 +8,12 @@ function marker(latLng, map) {
 
   const $form = $('form')[0];
   const marker = new google.maps.Marker(markerOptions);
+  let infoWindow;
   // const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
 
   function createMarker() {
     marker.setMap(map);
+    map.panTo(latLng);
   }
 
   // HELPER
@@ -33,15 +35,24 @@ function marker(latLng, map) {
       content: $form
     };
 
-    const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    infoWindow = new google.maps.InfoWindow(infoWindowOptions);
 
     infoWindow.open(map, marker);
-
   }
+
+  function mapClickedWhileInfoWindowIsUp(event) {
+    // marker.hide();
+    if (infoWindow) {
+    infoWindow.close();
+    }
+  }
+
 
   function bindEvents() {
     google.maps.event.addListener(marker, 'click', markerClicked);
     google.maps.event.addListener(marker, 'dragend', markerClicked);
+    google.maps.event.addListener(map, 'click', mapClickedWhileInfoWindowIsUp);
+
 
 
     $('body').submit('#map form', function(e) {

@@ -1,5 +1,7 @@
 "use strict"
 
+//============== Dependencies ==================
+
 const PORT = process.env.PORT || 8080;
 const express = require("express");
 const app = express();
@@ -15,6 +17,15 @@ const knex = require('knex')({
   connection: dbSettings
 });
 
+// This middleware prints details about each http request to the console. It works, but it also
+// prints one for every script request made, which for us means about 6 or 7. If we can find a way
+// to blacklist those scripts, we should implement it.
+// ===============================
+// var morgan = require('morgan')
+// app.use(morgan('combined'))
+// ===============================
+
+//=============== Middleware ====================
 
 app.use(bodyParser.urlencoded({
   extended:true
@@ -31,10 +42,33 @@ app.use(express.static("public"));
 
 
 
+// User authentication middleware. Working, but we don't have a way to activate logged_in yet.
+
+// const WHITELISTED_PAGES = ["/", "/register"]
+
+// app.use(function(req, res, next) {
+//   console.log("Authorizing...");
+//   console.log("My req.url: " + req.url);
+//   if(!WHITELISTED_PAGES.includes(req.url)) {
+//     const logged_in = req.session.user_id
+//     if(!logged_in) {
+//       res.redirect("/")
+//     }
+//   }
+//     console.log("I'm working!");
+//     next();
+// });
+
+
+
+
+
+
+
 // homepage
 app.get("/", (req, res) => {
-  console.log("Hello world");
   res.render("login");
+
 });
 
 // temp route for map development purposes for Behzad
