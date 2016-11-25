@@ -6,6 +6,9 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
 const dbSettings = require("./config/db");
 const knex = require('knex')({
   client: 'pg',
@@ -75,7 +78,46 @@ app.post("/users/:username/create", (req, res) => {
 // });
 
 // user registration
+app.get("/register", (req, res) => {
+  res.render("register");
+});
 
+app.post("/register", (req, res) => {
+  const input = req.body;
+
+  var unavailableUsername = "";
+  if (knex.select('*').from('users').where('username' = req.body.username)) {
+    unavailableUsername = req.body.username;
+  }
+  var unavailableEmail = "";
+  if (knex.select('*').from('users').where('username' = req.body.email)) {
+    unavailableEmail = req.body.email;
+  }
+
+  if (input.email === "" || input.username === "" || input.password === "") {
+    res.status(400).send("You are missing some inputs man")
+  } else if (unavailableUsername === input.username) {
+    res.status(400).send("Username unavaileble")
+  } else if (unavailableEmail === input.email) {
+    res.status(400).send("Email unavailable")
+  } else {
+    let enteredUsername   = input.username;
+    let enteredEmail      = input.email;
+    let enteredPassword   = input.password;
+    bcrypt.hash(enteredPassword, saltRounds, (err, hash) => {
+      const newUser = {
+        username: enteredUsername,
+        email:    enteredEmail,
+        password: hash
+      };
+      knex.insert(newUser).into('users').asCallback(function (err, rows) {
+        if (err) { console.log (err); throw err; }
+      });
+    })
+    res.redirect("/");
+  }
+
+});
 // login & logout
 
 // users page
