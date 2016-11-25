@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html>
-  <% include ./partials/_head %>
-  <body>
+<% include ./partials/_head %>
+<body>
   <% include ./partials/_header %>
   <div class="container">
     <div class="jumbotron">
-    <h1 class="display-3">Sign in, baby!</h1>
-    <p class="lead">We'll let you look at some maps, but if you want to make your own you'll need to sign in.</p>
-    <hr
-    <div class="container">
-  <form action="/" method="POST">
-    <div class="form-group row">
-      <label for="inputEmail3" class="col-sm-2 form-control-label">Username</label>
-      <div class="col-sm-10">
-        <input name="username" type="text" class="form-control" id="userName" placeholder="Username">
+      <h1 class="display-3">Sign in, baby!</h1>
+      <p class="lead">We'll let you look at some maps, but if you want to make your own you'll need to sign in.</p>
+      <div class="container">
+        <form action="/" method="POST">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label">Username</label>
+            <div class="col-sm-10">
+              <input name="username" type="text" class="form-control" id="userName" placeholder="Username">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputPassword3" class="col-sm-2 form-control-label">Password</label>
+            <div class="col-sm-10">
+              <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="Password">
+            </div>
+          </div>
+          <button type="submit" class="button btn-success btn-md" role="button">Login</button>
+        </form>
+        <div class="container">
+          <div class="row">
+            <p>Not a registered member yet? You'll need to <a href="/register">register</a> first.</p>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="inputPassword3" class="col-sm-2 form-control-label">Password</label>
-      <div class="col-sm-10">
-        <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="Password">
-      </div>
-    </div>
-    <button type="submit" class="button btn-success btn-md" role="button">Login</button>
-  </form>
-
-
-  <div class="container">
-    <div class="row">
-      <p>Not a registered member yet? You'll need to <a href="/register">register</a> first.</p>
     </div>
   </div>
-</div>
-
-
-    </div>
-
-  </body>
+</body>
 </html>

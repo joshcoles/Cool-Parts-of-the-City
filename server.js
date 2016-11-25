@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
 app.get("/renderMap", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 25)
+  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 47)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
@@ -139,8 +139,8 @@ app.post("/register", (req, res) => {
       }
     });
   }
-
 });
+
 // login & logout
 app.get("/", (req, res) => {
   res.render("login");
@@ -215,10 +215,6 @@ app.post("/users/:id/:postid", (req, res) => {
 // app.post("/users/:username/create", (req, res) => {
 //   console.log(req.body);
 // });
-
-
-
-
 
 //app.use("/users/behzad/create", coordinatesRoutes);
 

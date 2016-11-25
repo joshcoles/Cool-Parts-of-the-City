@@ -1,54 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      html, body {
-        height: 100%;
-        margin: 0;
-      }
+<head>
+  <title>Simple Map</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta charset="utf-8">
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
 
-      #map {
-        height: 70%;
-        width: 70%;
-        margin: 0;
-      }
+    #map {
+      height: 70%;
+      width: 70%;
+      margin: 0;
+    }
 
-      #autocomplete {
-        width: 50%;
-        height: 25px;
-      }
-    </style>
+    #autocomplete {
+      width: 50%;
+      height: 25px;
+    }
+  </style>
 
-    <!-- External JS -->
-    <script type="text/javascript" src="/vendor/jquery-3.1.1.min.js"></script>
+  <!-- External JS -->
+  <script type="text/javascript" src="/vendor/jquery-3.1.1.min.js"></script>
 
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <div id="map">
-      <input type="text" id="autocomplete">
+  <div id="map">
+    <input type="text" id="autocomplete">
+    <script src="/scripts/drawMap.js"></script>
+    <script src="/scripts/insertPointOnMap.js"></script>
+    <script src="/scripts/getCoordinatesOnEvent.js"></script>
+    <script src="/scripts/placeMarkerAndPanTo.js"></script>
+    <script src="/scripts/setUpEventListeners.js"></script>
+    <script src="/scripts/autoCompleteSearch.js"></script>
+    <script src="/scripts/clickableBtns.js"></script>
+    <script src="/scripts/editMap.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=editMap"
+    async defer"></script>
+  </div>
 
-      <script src="/scripts/drawMap.js"></script>
-      <script src="/scripts/insertPointOnMap.js"></script>
-      <script src="/scripts/getCoordinatesOnEvent.js"></script>
-      <script src="/scripts/placeMarkerAndPanTo.js"></script>
-      <script src="/scripts/setUpEventListeners.js"></script>
-      <script src="/scripts/autoCompleteSearch.js"></script>
-      <script src="/scripts/clickableBtns.js"></script>
-      <script src="/scripts/editMap.js"></script>
-
-      <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=editMap"
-      async defer"></script>
-
-      <script src="/scripts/clickableBtns.js"></script>
-
-    </div>
-
-  </body>
+</body>
 </html>
