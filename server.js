@@ -29,9 +29,11 @@ app.set("view engine", "ejs");
 // app.use(express.static("public"));
 app.use((req, res, next) => {
   res.locals.username = req.session.username ? req.session.username : null;
-  // knex.select('*').from('users').asCallback(function(err, rows) {
 
-  // })
+  knex.select('*').from('users').asCallback(function(err, rows) {
+    if (err) throw err;
+
+  })
 })
 
 
