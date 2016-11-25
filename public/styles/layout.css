@@ -1,6 +1,6 @@
 #map {
-        height: 50%;
-        width: 50%;
+        height: 75vh;
+        /*width: 100%;*/
 }
 
 html, body {
@@ -9,3 +9,5 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+

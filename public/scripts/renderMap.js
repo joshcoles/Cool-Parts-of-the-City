@@ -2,7 +2,6 @@
 // var insertPointsOnMap = require ('./insertPointsOnMap');
 
 function renderMap(){
-
   var map;
   var marker;
 
