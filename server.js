@@ -41,28 +41,22 @@ app.get("/", (req, res) => {
 
 // temp route for map development purposes for Behzad
 app.get("/renderMap", (req, res) => {
-  let templateVars;
-  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 25).asCallback(function (err, rows) {
+  let mapData = {};
+  let pointsData = {};
+  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 25)
+    .asCallback(function (err, rows) {
     if (err) throw err;
-    //let temp = [{lat: 12, lng: 12}, {lat: 13, lng: 13}];
-    let temp = rows;
-    temp.forEach((item) => {
-      JSON.stringify(item);
+    mapData = rows[0];
+    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
+      if (err) throw err;
+      pointsData = rows;
+      let dataTemplate = {
+          mapData: mapData,
+          pointsData: pointsData
+      };
+      dataTemplate = JSON.stringify(dataTemplate);
+      res.render('renderMap', {data: dataTemplate});
     });
-    console.log(temp);
-    JSON.stringify(temp);
-    //temp = temp.toString();
-    //console.log(temp);
-    console.log(temp);
-
-    templateVars = {
-      mapCenterLat: rows[0].center_x,
-      mapCenterLng: rows[0].center_y,
-      mapZoom: rows[0].zoom,
-      mapPoints: 1
-    };
-
-    res.render('renderMap', templateVars);
   });
 
 });
@@ -88,7 +82,7 @@ app.post("/users/:username/create", (req, res) => {
   let mapPoints = req.body.mapPoints;
 
   knex('maps').insert(mapTemplate).returning('id')
-    .then( (id) => {
+    .then((id) => {
       mapPoints.forEach((item) => {
         let pointTemplate = {
           longitude: item.lng,
@@ -103,8 +97,6 @@ app.post("/users/:username/create", (req, res) => {
     .asCallback(function (err, rows) {
       if (err) throw err;
     });
-
-
 });
 
 // user registration

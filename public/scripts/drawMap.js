@@ -8,7 +8,7 @@ function drawMap (lat, lng, zoomLevel, pointsArr) {
   var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
   pointsArr.forEach((item) => {
-    insertPointsOnMap (map, item.lat, item.lng);
+    insertPointsOnMap (map, item.latitude, item.longitude);
   });
 
   return map;

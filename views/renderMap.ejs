@@ -38,12 +38,8 @@
       <script src="/scripts/getCoordinatesOnEvent.js"></script>
       <script src="/scripts/setUpEventListeners.js"></script>
       <script type="text/javascript">
-          window.mapData = {
-            mapCenterLat: <%= mapCenterLat %>,
-            mapCenterLng: <%= mapCenterLng %>,
-            mapZoom: <%= mapZoom %>,
-            mapPoints: <%= mapPoints %>
-          };
+          var data = <%- JSON.stringify(data) %>;
+          window.data = data;
       </script>
       <script src="/scripts/renderMap.js"></script>
 
