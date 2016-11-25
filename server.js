@@ -12,6 +12,9 @@ const knex = require('knex')({
   connection: dbSettings
 });
 
+
+var x = [];
+
 app.use(bodyParser.urlencoded({
   extended:true
 }));
@@ -33,17 +36,40 @@ app.get("/", (req, res) => {
   res.render("login");
 });
 
-// // temp route for map development purposes for Behzad
-// app.get("/renderMap", (req, res) => {
-//   res.render("renderMap");
-// });
-
 // temp route for map development purposes for Behzad
+app.get("/renderMap", (req, res) => {
+  let templateVars;
+  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 25).asCallback(function (err, rows) {
+    if (err) throw err;
+    //let temp = [{lat: 12, lng: 12}, {lat: 13, lng: 13}];
+    let temp = rows;
+    temp.forEach((item) => {
+      JSON.stringify(item);
+    });
+    console.log(temp);
+    JSON.stringify(temp);
+    //temp = temp.toString();
+    //console.log(temp);
+    console.log(temp);
+
+    templateVars = {
+      mapCenterLat: rows[0].center_x,
+      mapCenterLng: rows[0].center_y,
+      mapZoom: rows[0].zoom,
+      mapPoints: 1
+    };
+
+    res.render('renderMap', templateVars);
+  });
+
+});
+
+
 app.get("/users/:username/create", (req, res) => {
   res.render("createNewMap");
 });
 
-// temp route for map development purposes for Behzad
+
 app.post("/users/:username/create", (req, res) => {
   console.log('success on server');
   let mapTemplate = {
@@ -56,18 +82,6 @@ app.post("/users/:username/create", (req, res) => {
   };
 
   let mapPoints = req.body.mapPoints;
-
-  // knex('maps').insert(mapTemplate).asCallback(function (err, rows) {
-  //   if (err) { console.log (err); throw err; }
-
-  //   // mapPoints.forEach((item) => {
-  //   //   let pointTemplate = {
-  //   //     longitude: mapPoints.lng,
-  //   //     latitude: mapPoints.lat
-  //   //   };
-  //   // });
-  // });
-
 
   knex('maps').insert(mapTemplate).returning('id')
     .then( (id) => {
@@ -84,38 +98,9 @@ app.post("/users/:username/create", (req, res) => {
     })
     .asCallback(function (err, rows) {
       if (err) throw err;
-      // else console.log("WHAT WHAT");
     });
 
-
-
-
-  // then( (id) => {
-  //   mapPoints.forEach((item) => {
-  //     let pointTemplate = {
-  //       longitude: item.lng,
-  //       latitude: item.lat,
-  //       map_id: parseInt(id)
-  //     };
-  //   });
-  // });
-
-  // knex('maps').select().asCallback(function (err, rows) {
-  //   if (err) console.log(err);
-  //   else console.log(rows);
-  // });
-
-  // knex('coordinates').select().asCallback(function (err, rows) {
-  //   if (err) throw err;
-  //   else console.log(rows);
-  // });
-
 });
-
-// // temp route for map development purposes for Behzad
-// app.get("/users/:username/:mapid", (req, res) => {
-//   res.render("editMap");
-// });
 
 // user registration
 
@@ -171,4 +156,17 @@ app.post("/users/:id/:postid", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
+
+
+
+function emptyDataTables (dataTable) {
+  knex(dataTable).del().asCallback(function (err, rows) {
+    if (err) throw err;
+    knex(dataTable).select().asCallback(function (err, rows) {
+      if (err) throw err;
+      else console.log(rows);
+    });
+  });
+}
 
