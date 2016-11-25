@@ -33,10 +33,10 @@ app.get("/", (req, res) => {
   res.render("renderMap");
 });
 
-// temp route for map development purposes for Behzad
-app.get("/renderMap", (req, res) => {
-  res.render("renderMap");
-});
+// // temp route for map development purposes for Behzad
+// app.get("/renderMap", (req, res) => {
+//   res.render("renderMap");
+// });
 
 // temp route for map development purposes for Behzad
 app.get("/users/:username/create", (req, res) => {
@@ -47,12 +47,28 @@ app.get("/users/:username/create", (req, res) => {
 app.post("/users/:username/create", (req, res) => {
   console.log('success on server');
   console.log(req.body);
-  res.send("success");
+  //res.send("success");
+  let template = {
+    center_x: req.body.mapCenterLat,
+    center_y: req.body.mapCenterLng,
+    user_id: null,
+    zoom: req.body.mapZoom
+  };
+  knex('maps').insert(template).asCallback(function (err, rows) {
+    if (err) console.log (err);
+  });
+
+  knex('maps').select().asCallback(function (err, rows) {
+    if (err) console.log(err);
+    else console.log(rows);
+  });
+
 });
 
-app.get("/users/:username/:mapid", (req, res) => {
-  res.render("editMap");
-});
+// // temp route for map development purposes for Behzad
+// app.get("/users/:username/:mapid", (req, res) => {
+//   res.render("editMap");
+// });
 
 // user registration
 
@@ -81,16 +97,26 @@ app.post("/users/:id/:postid", (req, res) => {
 });
 
 
+// app.get("/users/:username/create", (req, res) => {
+//   res.render('createNewMap');
+//   //console.log(req.body);
+// });
+
+// app.post("/users/:username/create", (req, res) => {
+//   console.log(req.body);
+// });
 
 
-const dataHelper = require("./lib/data-helper.js")();
-const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
-
-app.use("/users/:username/create", coordinatesRoutes);
 
 
 
+//app.use("/users/behzad/create", coordinatesRoutes);
 
+
+
+// const dataHelper = require("./lib/util/data-helpers.js")(req.body);
+// dataHelper.saveMaps(req.);
+// const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
 
 
 
