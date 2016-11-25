@@ -11,8 +11,9 @@ function createNewMap () {
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
   map.addListener('click', function(e) {
-    placeMarkerAndPanTo(e.latLng, map);
-    // points.push(e.latLng);
+
+    // placeMarkerAndPanTo(e.latLng, map);
+    marker(e.latLng, map);
     points.push({
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
