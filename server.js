@@ -130,7 +130,7 @@ app.post("/", (req, res) => {
 
   if (knex.select('*').from('users').where('username', '=', input.username)) {
     usernameFound = this.username;
-    usernameFound = this.password;
+    passwordFound = this.password;
   }
 
   if (input.username === usernameFound) {
