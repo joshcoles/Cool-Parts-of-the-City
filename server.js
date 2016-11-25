@@ -40,6 +40,10 @@ app.get("/", (req, res) => {
 
 // temp route for map development purposes for Behzad
 app.get("/users/:username/create", (req, res) => {
+  knex('coordinates').select().asCallback(function (err, rows) {
+    if (err) throw err;
+    else console.log(rows);
+  });
   res.render("createNewMap");
 });
 
@@ -48,7 +52,7 @@ app.post("/users/:username/create", (req, res) => {
   console.log('success on server');
   console.log(req.body);
   //res.send("success");
-  let template = {
+  let mapTemplate = {
     center_x: req.body.mapCenterLat,
     center_y: req.body.mapCenterLng,
     user_id: null,
@@ -56,13 +60,34 @@ app.post("/users/:username/create", (req, res) => {
     region: 'a region',
     keyword: 'a keyword'
   };
-  knex('maps').insert(template).asCallback(function (err, rows) {
-    if (err) { console.log (err); throw err; }
-  });
 
-  knex('maps').select().asCallback(function (err, rows) {
-    if (err) console.log(err);
-    else console.log(rows);
+  let mapPoints = req.body.mapPoints;
+
+  // knex('maps').insert(mapTemplate).asCallback(function (err, rows) {
+  //   if (err) { console.log (err); throw err; }
+
+  //   // mapPoints.forEach((item) => {
+  //   //   let pointTemplate = {
+  //   //     longitude: mapPoints.lng,
+  //   //     latitude: mapPoints.lat
+  //   //   };
+  //   // });
+  // });
+
+
+  knex('maps').insert(mapTemplate).returning('id').then( (id) => {
+    mapPoints.forEach((item) => {
+      let pointTemplate = {
+        longitude: item.lng,
+        latitude: item.lat,
+        map_id: parseInt(id)
+      };
+      knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
+        if (err) throw err;
+        else console.log(rows);
+      });
+    });
+
   });
 
 });
