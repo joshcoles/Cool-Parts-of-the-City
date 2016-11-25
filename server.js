@@ -86,11 +86,11 @@ app.post("/register", (req, res) => {
   const input = req.body;
 
   var unavailableUsername = "";
-  if (knex.select('*').from('users').where('username' = req.body.username)) {
+  if (knex.select('*').from('users').where('username', '=', req.body.username)) {
     unavailableUsername = req.body.username;
   }
   var unavailableEmail = "";
-  if (knex.select('*').from('users').where('username' = req.body.email)) {
+  if (knex.select('*').from('users').where('username', '=', req.body.email)) {
     unavailableEmail = req.body.email;
   }
 
@@ -119,6 +119,44 @@ app.post("/register", (req, res) => {
 
 });
 // login & logout
+app.get("/", (req, res) => {
+  res.render("login");
+});
+
+app.post("/", (req, res) => {
+  const input = req.body
+  var usernameFound    = "";
+  var passwordFound = "";
+
+  if (knex.select('*').from('users').where('username', '=', input.username)) {
+    usernameFound = this.username;
+    usernameFound = this.password;
+  }
+
+  if (input.username === usernameFound) {
+    console.log("email found in the db");
+    bcrypt.compare(input.password, passwordFound, (err, passwordMatch) => {
+      if (passwordMatch) {
+        req.session.username = input.username;
+        res.redirect(`/users/${input.username}`);
+        return;
+      }else {
+        console.log("wrong password");
+        res.status(401).send("Invalid username or password");
+        return;
+      }
+    })
+  }else {
+    console.log("username not found");
+    res.status(401).send("Invalid username or password");
+    return;
+  }
+});
+
+app.post("/logout", (req, res) => {
+  req.session.username = undefined;
+});
+
 
 // users page
 app.get("/users", (req, res) => {
