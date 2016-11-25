@@ -83,7 +83,36 @@ app.post("/users/:id/:postid", (req, res) => {
 
 });
 
-//
+
+app.post("/markers", (req, res) => {
+  // Create.marker(res.body)
+
+  res.send({sent: 'from server'});
+});
+
+
+// app.get("/users/:username/create", (req, res) => {
+//   res.render('createNewMap');
+//   //console.log(req.body);
+// });
+
+// app.post("/users/:username/create", (req, res) => {
+//   console.log(req.body);
+// });
+
+
+
+
+
+//app.use("/users/behzad/create", coordinatesRoutes);
+
+
+
+// const dataHelper = require("./lib/util/data-helpers.js")(req.body);
+// dataHelper.saveMaps(req.);
+// const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
