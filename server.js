@@ -26,8 +26,13 @@ app.use(cookieSession({
 }));
 
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+// app.use(express.static("public"));
+app.use((req, res, next) => {
+  res.locals.username = req.session.username ? req.session.username : null;
+  // knex.select('*').from('users').asCallback(function(err, rows) {
 
+  // })
+})
 
 
 // homepage
@@ -121,6 +126,7 @@ app.post("/register", (req, res) => {
   }
 
 });
+
 // login & logout
 app.get("/", (req, res) => {
   res.render("login");
