@@ -6,7 +6,7 @@ function renderMap(){
   var map;
   var marker;
 
-  map = drawMap(49.2812,-123.1105, 14);
+  map = drawMap(49.2812,-123.1105, 14, []);
 
-  marker = insertPointsOnMap(map, 49.2812,-123.1105);
+  // marker = insertPointsOnMap(map, 49.2812,-123.1105);
 }
