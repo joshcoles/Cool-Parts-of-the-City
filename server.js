@@ -6,7 +6,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
-const dbSettings = require("./config/db")
+const dbSettings = require("./config/db");
 const knex = require('knex')({
   client: 'pg',
   connection: dbSettings
@@ -33,14 +33,13 @@ app.get("/", (req, res) => {
   res.render("login");
 });
 
-// temp route for map development purposes for Behzad
+// // temp route for map development purposes for Behzad
+// app.get("/renderMap", (req, res) => {
+//   res.render("renderMap");
+// });
 
-app.get("/renderMap", (req, res) => {
-  res.render("renderMap");
-});
-
 // temp route for map development purposes for Behzad
-app.get("/create", (req, res) => {
+app.get("/users/:username/create", (req, res) => {
   res.render("createNewMap");
 });
 
@@ -48,9 +47,30 @@ app.get("/create", (req, res) => {
 app.post("/users/:username/create", (req, res) => {
   console.log('success on server');
   console.log(req.body);
-  res.send("success");
+  //res.send("success");
+  let template = {
+    center_x: req.body.mapCenterLat,
+    center_y: req.body.mapCenterLng,
+    user_id: null,
+    zoom: req.body.mapZoom,
+    region: 'a region',
+    keyword: 'a keyword'
+  };
+  knex('maps').insert(template).asCallback(function (err, rows) {
+    if (err) { console.log (err); throw err; }
+  });
+
+  knex('maps').select().asCallback(function (err, rows) {
+    if (err) console.log(err);
+    else console.log(rows);
+  });
 
 });
+
+// // temp route for map development purposes for Behzad
+// app.get("/users/:username/:mapid", (req, res) => {
+//   res.render("editMap");
+// });
 
 // user registration
 
@@ -79,7 +99,29 @@ app.post("/users/:id/:postid", (req, res) => {
 
 });
 
-//
+
+// app.get("/users/:username/create", (req, res) => {
+//   res.render('createNewMap');
+//   //console.log(req.body);
+// });
+
+// app.post("/users/:username/create", (req, res) => {
+//   console.log(req.body);
+// });
+
+
+
+
+
+//app.use("/users/behzad/create", coordinatesRoutes);
+
+
+
+// const dataHelper = require("./lib/util/data-helpers.js")(req.body);
+// dataHelper.saveMaps(req.);
+// const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
