@@ -3,7 +3,7 @@
       <!-- <p class="navbar-text navbar-right">Test</p> -->
 
       <!-- if not logged in, then-->
-      <!-- % if (username) { % -->
+      <% if (current_user) { %>
         <button type="button" class="btn btn-default navbar-btn ">
           <a href="/users/:id">
             My Maps
@@ -20,15 +20,15 @@
           </a>
         </button>
       <!-- else (if logged in) -->
-      <!-- % } else { % -->
+      <% } else { %>
 
-      <!-- % } % -->
       <button type="button" class="btn btn-default navbar-btn navbar-right">
         <a href="/">
           Sign In
         </a>
       </button>
 
+      <% } %>
 
 
     <!-- <a href="/urls/new">Create</a> -->

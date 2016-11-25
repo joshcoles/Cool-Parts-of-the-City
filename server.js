@@ -1,8 +1,8 @@
 "use strict"
 
+const PORT            = process.env.PORT || 8080;
 const express         = require("express");
 const app             = express();
-const PORT            = process.env.PORT || 8080;
 const bodyParser      = require("body-parser");
 const cookieParser    = require("cookie-parser");
 const session         = require("express-session");
@@ -24,12 +24,21 @@ app.use(cookieParser()); // do we need it if we are changing it to express-sessi
 
 // app.use(express.static("public"));
 app.use((req, res, next) => {
-  res.locals.username = req.session.username ? req.session.username : null;
-
-  knex.select('*').from('users').asCallback(function(err, rows) {
-    if (err) throw err;
-
-  })
+  res.locals.current_user = null;
+  if (req.session.username) {
+    knex.select('*').from('users').where('username', req.session.username).asCallback(function(err, rows) {
+      if (err) {
+        console.log(err);
+        next();
+      }
+      if (rows.length) {
+        res.locals.current_user = rows[0];
+      }
+      next();
+    })
+  } else {
+    next();
+  }
 })
 
 
