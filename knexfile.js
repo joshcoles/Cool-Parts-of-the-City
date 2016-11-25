@@ -1,11 +1,11 @@
 // Update with your config settings.
-const dbSettings = require("./config/db");
+const dbConfig = require("./config/db");
 
 module.exports = {
 
   development: {
     client: 'pg',
-    connection: dbSettings,
+    connection: dbConfig,
     pool: {
       min: 2,
       max: 10

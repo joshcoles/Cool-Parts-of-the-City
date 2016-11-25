@@ -1,31 +1,27 @@
 "use strict"
 
-const PORT = process.env.PORT || 8080;
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const cookieSession = require("cookie-session");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-
-const dbSettings = require("./config/db");
-const knex = require('knex')({
-  client: 'pg',
-  connection: dbSettings
-});
-
-app.use(bodyParser.urlencoded({
-  extended:true
-}));
-app.use(cookieParser());
-app.set('trust proxy', 1);
-app.use(cookieSession({
-  name: 'session',
-  keys: ['secretkey1', 'secretkey2']
-}));
+const express         = require("express");
+const app             = express();
+const PORT            = process.env.PORT || 8080;
+const bodyParser      = require("body-parser");
+const cookieParser    = require("cookie-parser");
+const session         = require("express-session");
+const bcrypt          = require("bcrypt");
+const saltRounds      = 10;
+const dbConfig        = require("./config/db");
+const knex            = require('knex')({ client: 'pg', connection: dbConfig });
 
 app.set("view engine", "ejs");
+app.set('trust proxy', 1);
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(cookieParser()); // do we need it if we are changing it to express-session from cookie-session??
+
 // app.use(express.static("public"));
 app.use((req, res, next) => {
   res.locals.username = req.session.username ? req.session.username : null;
@@ -84,7 +80,11 @@ app.post("/users/:username/create", (req, res) => {
 //   res.render("editMap");
 // });
 
-// user registration
+
+//         +---------------------+
+//         |  user registration  |
+//         +---------------------+
+
 app.get("/register", (req, res) => {
   res.render("register");
 });
@@ -129,7 +129,10 @@ app.post("/register", (req, res) => {
 
 });
 
-// login & logout
+//         +------------------+
+//         |  login & logout  |
+//         +------------------+
+
 app.get("/", (req, res) => {
   res.render("login");
 });
