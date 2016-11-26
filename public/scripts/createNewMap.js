@@ -11,23 +11,25 @@ function createNewMap () {
 
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
+
   map.addListener('click', function(e) {
 
     // placeMarkerAndPanTo(e.latLng, map);
     let thisMarker = marker(e.latLng, map);
+    console.log(thisMarker);
 
     pointsArr.push({
       mkr: thisMarker,
       lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
+      lng: e.latLng.lng()
     });
 
     markerArr.push(thisMarker);
 
 
-    if (currentPointId > 0) {
-      removeMarker(markerArr[0]);
-    }
+    // if (currentPointId > 0) {
+    //   removeMarker(markerArr[0]);
+    // }
 
   });
 

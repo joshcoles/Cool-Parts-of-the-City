@@ -1,22 +1,27 @@
 "use strict"
 
-//============== Dependencies ==================
+const PORT            = process.env.PORT || 8080;
+const express         = require("express");
+const app             = express();
+const bodyParser      = require("body-parser");
+const cookieParser    = require("cookie-parser");
+const session         = require("express-session");
+const bcrypt          = require("bcrypt");
+const saltRounds      = 10;
+const dbConfig        = require("./config/db");
+const knex            = require('knex')({ client: 'pg', connection: dbConfig });
 
-const PORT = process.env.PORT || 8080;
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const cookieSession = require("cookie-session");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
+app.set("view engine", "ejs");
+app.set('trust proxy', 1);
 
-const dbSettings = require("./config/db");
-const knex = require('knex')({
-  client: 'pg',
-  connection: dbSettings
-});
+app.use(express.static('public'));
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}));
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -26,20 +31,25 @@ const knex = require('knex')({
 // ===============================
 
 //=============== Middleware ====================
+app.use(cookieParser()); // do we need it if we are changing it to express-session from cookie-session??
 
-app.use(bodyParser.urlencoded({
-  extended:true
-}));
-app.use(cookieParser());
-app.set('trust proxy', 1);
-app.use(cookieSession({
-  name: 'session',
-  keys: ['secretkey1', 'secretkey2']
-}));
-
-app.set("view engine", "ejs");
-app.use(express.static("public"));
-
+app.use((req, res, next) => {
+  res.locals.current_user = null;
+  if (req.session.username) {
+    knex.select('*').from('users').where('username', req.session.username).asCallback(function(err, rows) {
+      if (err) {
+        console.log(err);
+        next();
+      }
+      if (rows.length) {
+        res.locals.current_user = rows[0];
+      }
+      next();
+    })
+  } else {
+    next();
+  }
+})
 
 
 // User authentication middleware. Working, but we don't have a way to activate logged_in yet.
@@ -76,6 +86,7 @@ app.get("/renderMap", (req, res) => {
   let mapData = {};
   let pointsData = {};
   knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 66)
+
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
@@ -140,7 +151,11 @@ app.post("/users/:username/create", (req, res) => {
     });
 });
 
-// user registration
+
+//         +---------------------+
+//         |  user registration  |
+//         +---------------------+
+
 app.get("/register", (req, res) => {
   res.render("register");
 });
@@ -184,7 +199,11 @@ app.post("/register", (req, res) => {
   }
 });
 
-// login & logout
+
+//         +------------------+
+//         |  login & logout  |
+//         +------------------+
+
 app.get("/", (req, res) => {
   res.render("login");
 });
@@ -206,13 +225,13 @@ app.post("/", (req, res) => {
             req.session.username = input.username;
             res.redirect(`/users/${input.username}`);
             return;
-          }else {
+          } else {
             console.log("wrong password");
             res.status(401).send("Invalid username or password");
             return;
           }
         })
-      }else {
+      } else {
         console.log("username not found");
         res.status(401).send("Invalid username or password");
         return;

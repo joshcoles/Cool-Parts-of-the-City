@@ -6,14 +6,25 @@ function marker(latLng, map) {
     draggable: true
   };
 
-  const $form = $('form')[0];
+
+  const $form = $('.new-poi-form')[0];
   const thisMarker = new google.maps.Marker(markerOptions);
+
   let infoWindow;
 
   // palces a marker on map and pans to it.
   function createMarker() {
     thisMarker.setMap(map);
     map.panTo(latLng);
+
+    const infoWindowOptions = {
+      content: $form
+    };
+
+    infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+
+    infoWindow.open(map, thisMarker);
+
   }
 
   // HELPER
@@ -51,30 +62,33 @@ function marker(latLng, map) {
   function bindEvents() {
     google.maps.event.addListener(thisMarker, 'click', markerClicked);
     google.maps.event.addListener(thisMarker, 'dragend', markerClicked);
-    google.maps.event.addListener(map, 'click', mapClickedWhileInfoWindowIsUp);
+    //google.maps.event.addListener(map, 'click', mapClickedWhileInfoWindowIsUp);
 
     $('body').submit('#map form', function(e) {
       e.preventDefault();
       let $form = $(this).find('#map form');
       let formData = {
-        description: $form.find('input[name="description"]').val()
+        title: $form.find('input[name="title"]').val(),
+        description: $form.find('input[name="description"]').val(),
+        url: $form.find('input[name="url"]').val()
       };
-      // console.log(formData);
-
-      $.post('/markers', formData).done(function(marker) {
-
-      });
+      //console.log(typeof(infoWindow.anchor));
+      indexInPointsArr = searchForMarker(infoWindow.anchor)
+      if (indexInPointsArr > -1) {
+        pointsArr[indexInPointsArr].infoBox = formData;
+        console.log(pointsArr[indexInPointsArr]);
+      }
     });
   }
 
   // initializes the marker.
   function init() {
+    mapClickedWhileInfoWindowIsUp();
     createMarker();
     bindEvents();
   }
 
   init();
-
   return thisMarker;
 
 };
@@ -94,10 +108,11 @@ function removeMarker(marker) {
 }
 
 function searchForMarker(marker) {
+  output = -1;
   pointsArr.forEach((point, index) => {
-    if (point.mkr === marker) return index;
+    if (JSON.stringify(point.mkr.getPosition()) === JSON.stringify(marker.getPosition())) output = index;
   });
-  return -1;
+  return output;
 }
 
 
