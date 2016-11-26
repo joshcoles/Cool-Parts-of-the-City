@@ -33,6 +33,7 @@ app.use(session({
 //=============== Middleware ====================
 
 app.use((req, res, next) => {
+
   res.locals.current_user = null;
   if (req.session.username) {
     knex.select('*').from('users').where('username', req.session.username).asCallback(function(err, rows) {
@@ -72,10 +73,8 @@ app.use((req, res, next) => {
 app.get("/listMaps", (req, res) => {
   knex('maps').select('id', 'keyword').asCallback((err, rows) => {
     if (err) throw err;
-    //console.log(rows);
     res.render("listMaps", {data: rows});
   });
-
 });
 
 //         +---------------------+
@@ -128,7 +127,7 @@ app.post("/users/:username/create", (req, res) => {
 app.get("/users/:username/:mapid", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 104)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 108)
 
     .asCallback(function (err, rows) {
     if (err) throw err;
@@ -151,7 +150,7 @@ app.get("/users/:username/:mapid", (req, res) => {
 
 app.post("/users/:username/edit", (req, res) => {
   console.log('Editing map....');
-  let map_id = 104;
+  let map_id = 108;
   let mapTemplate = {
     centre_x: req.body.mapCentreLat,
     centre_y: req.body.mapCentreLng,

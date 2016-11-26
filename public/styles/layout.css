@@ -15,11 +15,6 @@ html, body {
   display: none;
 }
 
-#map .info-window-form {
+#map .info-window-form  #pano{
   display: block;
-}
-
-
-#fuckoff {
-  border-top: 100px;
 }

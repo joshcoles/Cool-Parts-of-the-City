@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <% include ./partials/_head %>
-<head></head>
-<% include ./partials/_header %>
-<script type="text/javascript" src="/vendor/jquery-3.1.1.min.js"></script>
+<% include ./partials/_head %>
 
 <body>
+  <% include ./partials/_header %>
+  <script type="text/javascript" src="/vendor/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript">
+      var data = <%- JSON.stringify(data) %>;
+      window.data = data;
+  </script>
+  <script src="/scripts/autoCompleteSearch.js"></script>
+  <script src="/scripts/setUpMarker.js"></script>
+  <script src="/scripts/editMap.js"></script>
+  <script src="/scripts/clickableBtns.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=editMap"
+  async defer"></script>
+
 
   <div>
     <input class="form-control input-sm" type="text" id="autocomplete">
     <button class="mapDataChangeBtn button btn-success btn-md" type="button">Save Changes</button>
   </div>
 
-
-
-
-
-
-
-
-
+  <div id="map"></div>
+  <div id="pano"></div>
 
   <div class="container">
     <form class="info-window-form container form-group new-poi-form">
@@ -39,45 +43,12 @@
             <a href="#" class="list-group-item">My Favs</a>
           </div>
 
-        <div id="fuckoff" class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
           <h4>Map</h4>
           <div id="map"></div>
         </div>
       </div>
     </div>
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <div id="map">
-    <script type="text/javascript">
-        var data = <%- JSON.stringify(data) %>;
-        window.data = data;
-    </script>
-    <script src="/scripts/autoCompleteSearch.js"></script>
-    <script src="/scripts/editMap.js"></script>
-    <script src="/scripts/clickableBtns.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=editMap"
-    async defer"></script>
   </div>
 
 </body>

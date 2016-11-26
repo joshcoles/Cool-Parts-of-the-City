@@ -37,7 +37,7 @@ function conditionMapData (markerArr) {
         description: "yyy",
         url: "yyy"
       }
-    } else { requestPoints[index].infoBox = marker.infoBox; }
+    } else { requestMarkers[index].infoBox = marker.infoBox; }
   });
   return requestMarkers;
 }
