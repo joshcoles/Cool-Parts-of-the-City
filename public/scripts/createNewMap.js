@@ -15,7 +15,7 @@ function createNewMap () {
   map.addListener('click', function(e) {
     // placeMarkerAndPanTo(e.latLng, map);
     let thisMarker = marker(e.latLng, map);
-    console.log(thisMarker);
+    //console.log(thisMarker);
 
     pointsArr.push({
       mkr: thisMarker,
