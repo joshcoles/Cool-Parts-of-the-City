@@ -5,8 +5,13 @@
 
  module.exports = function(dataHelpers) {
 
-  coordinatesRoutes.get("/", (req, res) => {
-    dataHelpers.getCoordinates((err, coordinates) => {
+  coordinatesRoutes.get("/users/:username", (req, res) => {
+
+    let reqData = `username = ${req.params.username}`
+
+
+
+    dataHelpers.getCoordinates(reqData, (err, coordinates) => {
       if(err) {
         res.status(500).json({ error: err.message });
       } else {
@@ -15,30 +20,29 @@
     });
   });
 
+
   coordinatesRoutes.post("/users/:username/create", (req, res) => {
     if (!req.body) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
 
-    const maps = {
-      mapsData: [{
+    let mapData = {
+      mapTemplate: [{
         center_x: req.body.mapCenterLng,
         center_y: req.body.mapCenterLat,
         zoom: req.body.mapZoom
       }],
-
       coordinatesData: req.body.mapPoints
     }
 
-    dataHelpers.saveMaps(maps, (err) => {
+    dataHelpers.saveMaps(mapData, (err) => {
       if (err) {
         res.status(500).json({ err: err.message });
       } else {
         res.status(201).send();
       }
     })
-
 
   });
 
