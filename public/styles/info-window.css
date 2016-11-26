@@ -1,19 +1,30 @@
 .info-window-form {
   margin: 0;
   padding: 0;
-  height: 100px;
-  width: 300px;
+  /*height: 100px;
+  width: 300px;*/
 }
 class="info-box-form"
 
 #info-window-form-title{
-  width: 300px;
+  display: absolute;
+  width: 100%;
 }
 
 #info-window-form-description{
-  width: 300px;
+  display: absolute;
+  width: 100%;
 }
 
 #info-window-form-url{
-  width: 300px;
+  display: absolute;
+  width: 100%;
+}
+
+form.info-window-form {
+
+}
+
+input {
+  width: 100%;
 }

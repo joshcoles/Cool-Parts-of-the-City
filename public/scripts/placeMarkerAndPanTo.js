@@ -6,7 +6,7 @@ function marker(latLng, map) {
     draggable: true
   };
 
-  const $form = $('form')[0];
+  const $form = $('.new-poi-form')[0];
   const marker = new google.maps.Marker(markerOptions);
   let infoWindow;
   // const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
@@ -14,6 +14,15 @@ function marker(latLng, map) {
   function createMarker() {
     marker.setMap(map);
     map.panTo(latLng);
+
+    const infoWindowOptions = {
+      content: $form
+    };
+
+    infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+
+    infoWindow.open(map, marker);
+
   }
 
   // HELPER

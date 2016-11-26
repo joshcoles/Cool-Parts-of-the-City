@@ -17,6 +17,7 @@ function createNewMap () {
     points.push({
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
+
     });
 
   });
