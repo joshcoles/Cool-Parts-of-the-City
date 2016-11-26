@@ -14,6 +14,8 @@ const dataHelpers     = require("./lib/util/data-helpers");   // saveMaps & getM
 app.set("view engine", "ejs");
 app.set('trust proxy', 1);
 
+app.use(express.static('public'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
   secret: 'keyboard cat',
@@ -30,7 +32,6 @@ app.use(session({
 
 //=============== Middleware ====================
 
-// app.use(express.static("public"));
 app.use((req, res, next) => {
   res.locals.current_user = null;
   if (req.session.username) {
@@ -83,7 +84,8 @@ app.get("/", (req, res) => {
 app.get("/renderMap", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 54)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 66)
+
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
@@ -121,8 +123,8 @@ app.post("/users/:username/create", (req, res) => {
 
   console.log('success on server');
   let mapTemplate = {
-    center_x: req.body.mapCenterLat,
-    center_y: req.body.mapCenterLng,
+    centre_x: req.body.mapCentreLat,
+    centre_y: req.body.mapCentreLng,
     user_id: null,
     zoom: req.body.mapZoom,
     region: 'a region',
@@ -226,13 +228,13 @@ app.post("/", (req, res) => {
             req.session.username = input.username;
             res.redirect(`/users/${input.username}`);
             return;
-          }else {
+          } else {
             console.log("wrong password");
             res.status(401).send("Invalid username or password");
             return;
           }
         })
-      }else {
+      } else {
         console.log("username not found");
         res.status(401).send("Invalid username or password");
         return;
