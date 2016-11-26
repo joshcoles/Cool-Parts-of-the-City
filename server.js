@@ -75,7 +75,7 @@ app.use((req, res, next) => {
 app.get("/renderMap", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 66)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 70)
 
     .asCallback(function (err, rows) {
     if (err) throw err;
@@ -250,7 +250,7 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', 66)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', 68)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
