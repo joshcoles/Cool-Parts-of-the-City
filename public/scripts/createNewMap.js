@@ -21,7 +21,7 @@ function createNewMap () {
       mkr: thisMarker,
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
-    };
+    });
     points.push(marker_latLng);
 
     // var poiForm = createPoiForm(lat, lng);  // this is Josh's code?
