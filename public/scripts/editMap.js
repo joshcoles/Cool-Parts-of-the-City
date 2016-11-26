@@ -7,6 +7,7 @@ let pointsArr = [];
 function editMap(){
   let data = JSON.parse(window.data);
   drawMap(data);
+
 }
 
 function drawMap (data) {
@@ -73,4 +74,14 @@ function searchForPointBy(id) {
   return output;
 }
 
-
+ var panorama;
+    function initialize() {
+      panorama = new google.maps.StreetViewPanorama(
+          document.getElementById('street-view'),
+          {
+            position: {lat: 49.2776612, lng: -123.1081074},
+            pov: {heading: 165, pitch: 0},
+            zoom: 1
+          });
+    }
+  initialize();
