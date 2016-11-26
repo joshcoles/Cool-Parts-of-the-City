@@ -50,23 +50,22 @@ app.use((req, res, next) => {
   }
 })
 
-
 // User authentication middleware. Working, but we don't have a way to activate logged_in yet.
 
-// const WHITELISTED_PAGES = ["/", "/register"]
+const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
 
-// app.use(function(req, res, next) {
-//   console.log("Authorizing...");
-//   console.log("My req.url: " + req.url);
-//   if(!WHITELISTED_PAGES.includes(req.url)) {
-//     const logged_in = req.session.user_id
-//     if(!logged_in) {
-//       res.redirect("/")
-//     }
-//   }
-//     console.log("I'm working!");
-//     next();
-// });
+app.use(function(req, res, next) {
+  console.log("Authorizing...");
+  console.log("My req.url: " + req.url);
+  if(!WHITELISTED_PAGES.includes(req.url)) {
+    const authorized = req.session.username
+    if(!authorized) {
+      res.redirect("/")
+    }
+  }
+    console.log("I'm working!");
+    next();
+});
 
 
 
