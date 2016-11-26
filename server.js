@@ -68,32 +68,6 @@ app.use((req, res, next) => {
 //     next();
 // });
 
-
-
-// temp route for map development purposes for Behzad
-app.get("/users/:username/:mapid", (req, res) => {
-  let mapData = {};
-  let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 70)
-
-    .asCallback(function (err, rows) {
-    if (err) throw err;
-    mapData = rows[0];
-    knex('coordinates').where('map_id', rows[0].id)
-    .asCallback(function (err, rows) {
-      if (err) throw err;
-      pointsData = rows;
-      let dataTemplate = {
-          mapData: mapData,
-          pointsData: pointsData
-      };
-      dataTemplate = JSON.stringify(dataTemplate);
-      res.render('editMap', {data: dataTemplate});
-    });
-  });
-
-});
-
 // temp reoute for development purposes for Behzad
 app.get("/listMaps", (req, res) => {
   knex('maps').select('id', 'keyword').asCallback((err, rows) => {
@@ -104,13 +78,15 @@ app.get("/listMaps", (req, res) => {
 
 });
 
+//         +---------------------+
+//         |CREATE GET AND POIST  |
+//         +---------------------+
 app.get("/users/:username/create", (req, res) => {
   res.render("createNewMap");
 });
 
 
 app.post("/users/:username/create", (req, res) => {
-
   console.log('success on server');
   let mapTemplate = {
     centre_x: req.body.mapCentreLat,
@@ -146,9 +122,36 @@ app.post("/users/:username/create", (req, res) => {
 
 
 //         +---------------------+
+//         |   DEVELOPMENT EDIT  |
+//         +---------------------+
+// temp route for map development purposes for Behzad
+app.get("/users/:username/:mapid", (req, res) => {
+  let mapData = {};
+  let pointsData = {};
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 76)
+
+    .asCallback(function (err, rows) {
+    if (err) throw err;
+    mapData = rows[0];
+    knex('coordinates').where('map_id', rows[0].id)
+    .asCallback(function (err, rows) {
+      if (err) throw err;
+      pointsData = rows;
+      let dataTemplate = {
+          mapData: mapData,
+          pointsData: pointsData
+      };
+      dataTemplate = JSON.stringify(dataTemplate);
+      res.render('editMap', {data: dataTemplate});
+    });
+  });
+
+});
+
+
+//         +---------------------+
 //         |  user registration  |
 //         +---------------------+
-
 app.get("/register", (req, res) => {
   res.render("register");
 });

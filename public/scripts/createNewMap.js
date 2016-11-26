@@ -1,9 +1,9 @@
 let map = {};
-let pointsArr = [];
 let markerArr = [];
+let allMyGoddamnInfoWindows = [];
 
 function createNewMap () {
-  var mapOptions = {
+  let mapOptions = {
     center: new google.maps.LatLng(49.28, -123.11),
     zoom: 14,
     mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -11,43 +11,106 @@ function createNewMap () {
 
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-
   map.addListener('click', function(e) {
-    // placeMarkerAndPanTo(e.latLng, map);
     let thisMarker = marker(e.latLng, map);
-    //console.log(thisMarker);
-
-    pointsArr.push({
-      mkr: thisMarker,
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
-    });
-
-    // var poiForm = createPoiForm(lat, lng);  // this is Josh's code?
-    // poiForm.on('submit', function(event) {
-    // })s
-
     markerArr.push(thisMarker);
-
-
-    // if (currentPointId > 0) {
-    //   removeMarker(markerArr[0]);
-    // }
-
-
   });
-
-  $('.info-window-form container form-group').on('submit', function (event) {
-    var thisForm = $(this);
-    var name = thisForm.find('#info-window-form-name').val();
-    var description = thisForm.find('#info-window-form-description').val();
-    var img_url = thisForm.find('#info-window-form-url').val();
-
-
-
-  })
 
   autoCompleteSearch(map);
 
   return map;
 }
+
+
+function closeAllGoddamnInfoWindows() {
+  while (allMyGoddamnInfoWindows.length > 0) {
+    allMyGoddamnInfoWindows[0].close();
+    allMyGoddamnInfoWindows.shift();
+  }
+}
+
+function marker(latLng, map) {
+
+  const markerOptions = {
+    position: latLng,
+    map: map,
+    draggable: true
+  };
+
+
+  const $form = document.importNode($('.new-poi-form')[0], true); // duplicate DOM node because googleMaps
+  const thisMarker = new google.maps.Marker(markerOptions);
+  let infoWindow;
+
+  function createMarker() {
+    closeAllGoddamnInfoWindows();
+    thisMarker.setMap(map);
+    map.panTo(latLng);
+    const infoWindowOptions = { content: $form };
+    infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    allMyGoddamnInfoWindows.push(infoWindow);
+    infoWindow.open(map, thisMarker);
+  }
+
+  function markerClicked(event) {
+    //closeAllGoddamnInfoWindows();
+    const infoWindowOptions = { content: $form };
+    infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    allMyGoddamnInfoWindows.push(infoWindow);
+    infoWindow.open(map, thisMarker);
+  }
+
+  function bindEvents() {
+    google.maps.event.addListener(thisMarker, 'click', markerClicked);
+    google.maps.event.addListener(thisMarker, 'dragend', markerClicked);
+    //google.maps.event.addListener(map, 'click', mapClickedWhileInfoWindowIsUp);
+
+    $('.submitInfoBox').on('click', function(e) {
+      e.preventDefault();
+      let $form = $(this).parent();
+      let formData = {
+        title: $form.find('input[name="title"]').val(),
+        description: $form.find('input[name="description"]').val(),
+        url: $form.find('input[name="url"]').val()
+      };
+
+      if (formData.title === "") formData.title = "xxx";
+      if (formData.description === "") formData.description = "xxx";
+      if (formData.url === "") formData.url = "xxx";
+
+      indexInmarkerArr = searchForMarker(infoWindow.anchor);
+      if (indexInmarkerArr > -1) {
+        markerArr[indexInmarkerArr]['infoBox'] = formData;
+      }
+    });
+
+  }
+
+  function init() {
+    createMarker();
+    bindEvents();
+  }
+
+  init();
+  return thisMarker;
+
+};
+
+function searchForMarker(marker) {
+  var output = -1;
+  markerArr.forEach((point, index) => {
+    if (JSON.stringify(point.getPosition()) === JSON.stringify(marker.getPosition())) output = index;
+  });
+  return output;
+}
+
+
+// function removeMarker(marker) {
+//   marker.setMap(null);
+//   let index = searchForMarker(marker);
+//   // markerArr[index].setMap(null);
+//   if (index > -1) {
+//     markerArr.splice(index, 1);
+//     markerArr.splice(index, 1);
+//   }
+// }
