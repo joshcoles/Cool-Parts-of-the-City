@@ -71,18 +71,43 @@ app.use((req, res, next) => {
 
 // temp reoute for development purposes for Behzad
 app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'keyword').asCallback((err, rows) => {
+  knex('maps').select('id', 'keyword', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
     if (err) throw err;
     res.render("listMaps", {data: rows});
+    console.log(rows);
   });
 });
 
+
+
+
+
+
+
+//         +--------------------------+
+//         |Fixes url fron info window|
+//         +--------------------------+
+
+
+function fixURL(originalURL) {
+  if (!(originalURL.includes("://"))) {
+    originalURL = "http://" + originalURL;
+  }
+  return originalURL;
+}
+
+
+
+
+
+
 //         +---------------------+
-//         |CREATE GET AND POIST  |
+//         |CREATE GET AND POST |
 //         +---------------------+
 app.get("/users/:username/create", (req, res) => {
   res.render("createNewMap");
 });
+
 
 
 app.post("/users/:username/create", (req, res) => {
@@ -105,9 +130,9 @@ app.post("/users/:username/create", (req, res) => {
           lng: point.lng,
           lat: point.lat,
           map_id: parseInt(id),
-          name: 'a name',
-          description: 'a description',
-          img_url: 'the url'
+          name: point.infoBox.title,
+          description: point.infoBox.description,
+          img_url: fixURL(point.infoBox.url)
         };
         knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
           if (err) throw err;
@@ -286,7 +311,7 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', 68)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', 108)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
@@ -333,6 +358,8 @@ function emptyDataTables (dataTable) {
     });
   });
 }
+
+
 
 
 

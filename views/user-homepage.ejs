@@ -22,23 +22,41 @@
       </div>
     </div>
   </div>
-    <script src="/scripts/drawMap.js"></script>
-    <script src="/scripts/insertPointOnMap.js"></script>
-<!--     <script src="/scripts/getCoordinatesOnEvent.js"></script> -->
-    <script src="/scripts/setUpEventListeners.js"></script>
-    <script type="text/javascript">
-        var data = <%- JSON.stringify(data) %>;
-        window.data = data;
-    </script>
-    <script src="/scripts/clickableBtns.js"></script>
-<!--     <script src="/scripts/renderMap.js"></script> -->
+
+
+
+
+<!-- <div class="container">
+  <div id="street-view" style="height: 300px; width: 300px;"></div>
+</div> -->
+
+    <!-- script async defer
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=initialize">
+    </script> -->
+
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=editMap"
     async defer"></script>
+
+
   <script src="/scripts/drawMap.js"></script>
   <script src="/scripts/insertPointOnMap.js"></script>
-<!--   <script src="/scripts/getCoordinatesOnEvent.js"></script> -->
   <script src="/scripts/setUpEventListeners.js"></script>
-  <script src="/scripts/editMap.js"></script>
+  <script type="text/javascript">
+      var data = <%- JSON.stringify(data) %>;
+      window.data = data;
+  </script>
   <script src="/scripts/clickableBtns.js"></script>
+  <script src="/scripts/editMap.js"></script>
+  <script src="/scripts/drawMap.js"></script>
+  <script src="/scripts/insertPointOnMap.js"></script>
+  <script src="/scripts/setUpEventListeners.js"></script>
+  <script src="/scripts/clickableBtns.js"></script>
+
+
+
+
+
 </body>
 </html>
+
+
