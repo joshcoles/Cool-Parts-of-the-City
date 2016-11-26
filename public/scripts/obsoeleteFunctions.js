@@ -1,3 +1,20 @@
+// // Sets up the relevant event listeners on a particular marker on the map.
+
+// function setUpEventListeners (marker) {
+//   google.maps.event.addListener(marker, 'click', getCoordinatesOnEvent);
+//   google.maps.event.addListener(marker, 'dragend', getCoordinatesOnEvent);
+// }
+
+
+
+
+
+
+
+
+
+
+
 // var allMyGoddamnInfoWindows = [];
 
 // function closeAllGoddamnInfoWindows(){
@@ -133,3 +150,103 @@
 //   return output;
 // }
 
+
+
+
+
+
+
+
+
+
+
+
+// function insertPointsOnMap (myMap, point) {
+//     var markerOptions = {
+//       position: new google.maps.LatLng(lat, lng),
+//       draggable: true
+//     };
+
+//     var infoWindowOptions = {
+//       content: 'test'
+//     }
+
+//     // debugger;
+//     var marker = new google.maps.Marker(markerOptions);
+//     marker.setMap(myMap);
+//     // console.log(myMap);
+
+//     var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+
+//     google.maps.event.addListener(marker,'click', function() {
+//       // console.log("I'm firing my lazer");
+//       infoWindow.open(myMap, marker);
+//     });
+
+//     // setUpEventListeneners(marker);
+
+//     return marker;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// gets the coordinates of the event when a google map event happens.
+// returns the coordinates as an object.
+// function getCoordinatesOnEvent (event) {
+
+//   let coordinates = {
+//     lat: event.latLng.lat(),
+//     lng: event.latLng.lng()
+//   }
+
+//   console.log( coordinates );
+//   return coordinates;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function drawMap (lat, lng, zoomLevel, pointsArr) {
+//   var mapOptions = {
+//     center: new google.maps.LatLng(lat, lng),
+//     zoom: zoomLevel,
+//     mapTypeId: google.maps.MapTypeId.ROADMAP
+//   };
+
+//   var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+//   pointsArr.forEach((point) => {
+//     insertPointsOnMap (map, point);
+//   });
+
+//   return map;
+// }

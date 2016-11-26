@@ -37,60 +37,6 @@ function drawMap (data) {
   return map;
 }
 
-// function insertPointsOnMap (myMap, point) {
-//     let markerOptions = {
-//       position: new google.maps.LatLng(point.lat, point.lng),
-//       draggable: true,
-//       id: point.id
-//     };
-
-//     let infoWindowOptions = {
-//       content: markerOptions.id
-//     }
-
-//     let marker = new google.maps.Marker(markerOptions);
-//     marker.setMap(myMap);
-//     setUpEventListeners(marker);
-//     markerArr.push(marker);
-
-//     var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-
-//     google.maps.event.addListener(marker,'click', function() {
-//       infoWindow.open(myMap, marker);
-//     });
-
-//     return marker;
-// }
-
-
-// function setUpEventListeners (marker) {
-//   google.maps.event.addListener(marker, 'click', updatemarkerArr);
-//   google.maps.event.addListener(marker, 'dragend', updatemarkerArr);
-
-//   function updatemarkerArr (event) {
-//     let index = searchForPointBy(this.id);
-//     markerArr[index] = this;
-//     console.log("AFTER: ", markerArr[2].getPosition().lat(), markerArr[2].getPosition().lng());
-//     return 0;
-//   }
-// }
-
-// function searchForPointBy(id) {
-//   let output = -1;
-//   markerArr.forEach((marker, index) => {
-//     if (marker.id === id) output = index;
-//   });
-//   return output;
-// }
-
-
-
-
-
-
-
-
-
 
 
 
