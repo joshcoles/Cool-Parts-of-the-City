@@ -1,5 +1,6 @@
 let map = {};
-let points = [];
+let pointsArr = [];
+let markerArr = [];
 
 function createNewMap () {
   var mapOptions = {
@@ -13,11 +14,20 @@ function createNewMap () {
   map.addListener('click', function(e) {
 
     // placeMarkerAndPanTo(e.latLng, map);
-    marker(e.latLng, map);
-    points.push({
+    let thisMarker = marker(e.latLng, map);
+
+    pointsArr.push({
+      mkr: thisMarker,
       lat: e.latLng.lat(),
-      lng: e.latLng.lng()
+      lng: e.latLng.lng(),
     });
+
+    markerArr.push(thisMarker);
+
+
+    if (currentPointId > 0) {
+      removeMarker(markerArr[0]);
+    }
 
   });
 

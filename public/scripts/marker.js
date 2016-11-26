@@ -7,18 +7,18 @@ function marker(latLng, map) {
   };
 
   const $form = $('form')[0];
-  const marker = new google.maps.Marker(markerOptions);
+  const thisMarker = new google.maps.Marker(markerOptions);
   let infoWindow;
-  // const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
 
+  // palces a marker on map and pans to it.
   function createMarker() {
-    marker.setMap(map);
+    thisMarker.setMap(map);
     map.panTo(latLng);
   }
 
   // HELPER
   // =======
-
+  // gets coordinates of a marker event
   function getCoordinates(event) {
     return {
       lat: event.latLng.lat(),
@@ -29,17 +29,17 @@ function marker(latLng, map) {
   // EVENTS
   // =======
 
+  // opens an info window when a maker is clicked.
   function markerClicked(event) {
-
     const infoWindowOptions = {
       content: $form
     };
-
     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-
-    infoWindow.open(map, marker);
+    infoWindow.open(map, thisMarker);
+    // console.log(event.latLng.lat());
   }
 
+  // it will close down any open info windows when another part of map is clicked.
   function mapClickedWhileInfoWindowIsUp(event) {
     // marker.hide();
     if (infoWindow) {
@@ -47,13 +47,11 @@ function marker(latLng, map) {
     }
   }
 
-
+  // binds the map listener events and assigns them functions.
   function bindEvents() {
-    google.maps.event.addListener(marker, 'click', markerClicked);
-    google.maps.event.addListener(marker, 'dragend', markerClicked);
+    google.maps.event.addListener(thisMarker, 'click', markerClicked);
+    google.maps.event.addListener(thisMarker, 'dragend', markerClicked);
     google.maps.event.addListener(map, 'click', mapClickedWhileInfoWindowIsUp);
-
-
 
     $('body').submit('#map form', function(e) {
       e.preventDefault();
@@ -61,7 +59,7 @@ function marker(latLng, map) {
       let formData = {
         description: $form.find('input[name="description"]').val()
       };
-      console.log(formData);
+      // console.log(formData);
 
       $.post('/markers', formData).done(function(marker) {
 
@@ -69,6 +67,7 @@ function marker(latLng, map) {
     });
   }
 
+  // initializes the marker.
   function init() {
     createMarker();
     bindEvents();
@@ -76,13 +75,33 @@ function marker(latLng, map) {
 
   init();
 
+  return thisMarker;
+
 };
 
 
+function removeMarker(marker) {
+  marker.setMap(null);
+  let index = markerArr.indexOf(marker);
+  markerArr[index].setMap(null);
+
+  if (index > -1) {
+    markerArr.splice(index, 1);
+    pointsArr.splice(index, 1);
+  }
+  console.log(markerArr);
+  console.log(pointsArr);
+}
+
+function searchForMarker(marker) {
+  pointsArr.forEach((point, index) => {
+    if (point.mkr === marker) return index;
+  });
+  return -1;
+}
+
 
 // function placeMarkerAndPanTo(latLng, map) {
-
-
 
 //  // map.panTo(latLng);
 //     setUpEventListeners(marker);

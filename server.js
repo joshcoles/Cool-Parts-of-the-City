@@ -75,7 +75,7 @@ app.get("/", (req, res) => {
 app.get("/renderMap", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'center_x', 'center_y', 'zoom', 'keyword').where('id', 54)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 66)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
@@ -112,8 +112,8 @@ app.post("/users/:username/create", (req, res) => {
 
   console.log('success on server');
   let mapTemplate = {
-    center_x: req.body.mapCenterLat,
-    center_y: req.body.mapCenterLng,
+    centre_x: req.body.mapCentreLat,
+    centre_y: req.body.mapCentreLng,
     user_id: null,
     zoom: req.body.mapZoom,
     region: 'a region',
@@ -126,8 +126,8 @@ app.post("/users/:username/create", (req, res) => {
     .then((id) => {
       mapPoints.forEach((item) => {
         let pointTemplate = {
-          longitude: item.lng,
-          latitude: item.lat,
+          lng: item.lng,
+          lat: item.lat,
           map_id: parseInt(id)
         };
         knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
