@@ -106,9 +106,9 @@ app.post("/users/:username/create", (req, res) => {
           lng: point.lng,
           lat: point.lat,
           map_id: parseInt(id),
-          name: 'a name',
-          description: 'a description',
-          img_url: 'the url'
+          name: point.infoBox.title,
+          description: point.infoBox.description,
+          img_url: point.infoBox.url
         };
         knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
           if (err) throw err;
