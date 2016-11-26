@@ -71,7 +71,7 @@ app.use((req, res, next) => {
 
 
 // temp route for map development purposes for Behzad
-app.get("/renderMap", (req, res) => {
+app.get("/users/:username/:mapid", (req, res) => {
   let mapData = {};
   let pointsData = {};
   knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 70)
@@ -88,7 +88,7 @@ app.get("/renderMap", (req, res) => {
           pointsData: pointsData
       };
       dataTemplate = JSON.stringify(dataTemplate);
-      res.render('renderMap', {data: dataTemplate});
+      res.render('editMap', {data: dataTemplate});
     });
   });
 
@@ -281,24 +281,6 @@ app.post("/markers", (req, res) => {
   res.send({sent: 'from server'});
 });
 
-// app.get("/users/:username/create", (req, res) => {
-//   res.render('createNewMap');
-//   //console.log(req.body);
-// });
-
-// app.post("/users/:username/create", (req, res) => {
-//   console.log(req.body);
-// });
-
-//app.use("/users/behzad/create", coordinatesRoutes);
-
-
-
-// const dataHelper = require("./lib/util/data-helpers.js")(req.body);
-// dataHelper.saveMaps(req.);
-// const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
-
-
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
@@ -315,3 +297,21 @@ function emptyDataTables (dataTable) {
   });
 }
 
+
+
+// app.get("/users/:username/create", (req, res) => {
+//   res.render('createNewMap');
+//   //console.log(req.body);
+// });
+
+// app.post("/users/:username/create", (req, res) => {
+//   console.log(req.body);
+// });
+
+//app.use("/users/behzad/create", coordinatesRoutes);
+
+
+
+// const dataHelper = require("./lib/util/data-helpers.js")(req.body);
+// dataHelper.saveMaps(req.);
+// const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);

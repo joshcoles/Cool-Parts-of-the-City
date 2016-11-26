@@ -1,15 +1,76 @@
-// Takes a latitude, longitude and a zoom level
-// returns a map centered on the given point with the given zoom level.
+// var createMap = require('./createMap');
+// var insertPointsOnMap = require ('./insertPointsOnMap');
 
-function editMap (lat, lng, zoomLevel) {
-  var map;
-  var marker;
+let currentMap;
+let pointsArr = [];
 
-  let points = [{
-    lat: 49.2812,
-    lng: -123.1105
-  }];
-
-  map = drawMap(49.2812,-123.1105, 14, points);
-
+function editMap(){
+  let data = JSON.parse(window.data);
+  drawMap(data);
 }
+
+function drawMap (data) {
+  let mapData = data.mapData;
+  let pointsData = data.pointsData;
+
+  let mapOptions = {
+    center: new google.maps.LatLng(mapData.centre_x, mapData.centre_y),
+    zoom: mapData.zoom,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  currentMap = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+  pointsData.forEach((point) => {
+    insertPointsOnMap (currentMap, point);
+  });
+  return map;
+}
+
+function insertPointsOnMap (myMap, point) {
+    let markerOptions = {
+      position: new google.maps.LatLng(point.lat, point.lng),
+      draggable: true,
+      id: point.id
+    };
+
+    let infoWindowOptions = {
+      content: markerOptions.id
+    }
+
+    let marker = new google.maps.Marker(markerOptions);
+    marker.setMap(myMap);
+    setUpEventListeners(marker);
+    pointsArr.push(marker);
+
+    var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+
+    google.maps.event.addListener(marker,'click', function() {
+      infoWindow.open(myMap, marker);
+    });
+
+    return marker;
+}
+
+
+function setUpEventListeners (marker) {
+  google.maps.event.addListener(marker, 'click', updatePointsArr);
+  google.maps.event.addListener(marker, 'dragend', updatePointsArr);
+
+  function updatePointsArr (event) {
+    let index = searchForPointBy(this.id);
+    pointsArr[index] = this;
+    console.log("AFTER: ", pointsArr[2].getPosition().lat(), pointsArr[2].getPosition().lng());
+    return 0;
+  }
+}
+
+function searchForPointBy(id) {
+  let output = -1;
+  pointsArr.forEach((marker, index) => {
+    if (marker.id === id) output = index;
+  });
+  return output;
+}
+
+

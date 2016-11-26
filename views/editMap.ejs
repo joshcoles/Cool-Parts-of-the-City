@@ -31,14 +31,16 @@
 
 <body>
 
+  <div>
+    <input class="form-control input-sm" type="text" id="autocomplete">
+    <button class="editMap button btn-success btn-md" type="button">Save Changes</button>
+  </div>
+
   <div id="map">
-    <input type="text" id="autocomplete">
-    <script src="/scripts/drawMap.js"></script>
-    <script src="/scripts/insertPointOnMap.js"></script>
-<!--     <script src="/scripts/getCoordinatesOnEvent.js"></script> -->
-    <script src="/scripts/marker.js"></script>
-    <script src="/scripts/setUpEventListeners.js"></script>
-    <script src="/scripts/autoCompleteSearch.js"></script>
+    <script type="text/javascript">
+        var data = <%- JSON.stringify(data) %>;
+        window.data = data;
+    </script>
     <script src="/scripts/clickableBtns.js"></script>
     <script src="/scripts/editMap.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=editMap"
