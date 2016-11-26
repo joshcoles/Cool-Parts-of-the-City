@@ -15,16 +15,6 @@ function autoCompleteSearch (map) {
     let place = autocomplete.getPlace();
     map.setCenter(place.geometry.location);
 
-    //map.setZoom(14);
-    // if (place.geometry.viewport) {
-    //   map.fitBounds(place.geometry.viewport);
-    //   console.log('asdasdasd');
-    // } else {
-    //   map.setCenter(place.geometry.location);
-    //   console.log('qwwqeqweqweq');
-    //   map.setZoom(14);
-    // }
-
     marker.setPosition(place.geometry.location);
     infoWindow.setContent('<div><strong>' + place.name + '</strong><br>');
     infoWindow.open(map, marker);

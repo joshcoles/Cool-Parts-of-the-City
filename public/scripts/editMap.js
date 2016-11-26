@@ -33,6 +33,8 @@ function drawMap (data) {
 
   });
 
+  // Potentiall to be used for street view functionality.
+  // ______________________________________________________
   // var fenway = {lat: 42.345573, lng: -71.098326};
   // var panorama = new google.maps.StreetViewPanorama(
   //   document.getElementById('pano'), {

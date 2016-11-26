@@ -22,6 +22,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
+
+const tempMapId = 113;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -152,7 +155,7 @@ app.post("/users/:username/create", (req, res) => {
 app.get("/users/:username/:mapid", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 108)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', tempMapId)
 
     .asCallback(function (err, rows) {
     if (err) throw err;
@@ -175,7 +178,7 @@ app.get("/users/:username/:mapid", (req, res) => {
 
 app.post("/users/:username/edit", (req, res) => {
   console.log('Editing map....');
-  let map_id = 108;
+  let map_id = tempMapId;
   let mapTemplate = {
     centre_x: req.body.mapCentreLat,
     centre_y: req.body.mapCentreLng,
@@ -311,7 +314,7 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', 108)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', tempMapId)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];

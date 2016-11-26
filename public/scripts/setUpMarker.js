@@ -61,7 +61,6 @@ function marker(lat, lng, map) {
         markerArr[indexInmarkerArr]['infoBox'] = formData;
       }
     });
-
   }
 
   function init() {
