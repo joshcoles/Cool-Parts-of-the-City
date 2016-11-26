@@ -4,12 +4,12 @@ const PORT            = process.env.PORT || 8080;
 const express         = require("express");
 const app             = express();
 const bodyParser      = require("body-parser");
-const cookieParser    = require("cookie-parser");
 const session         = require("express-session");
 const bcrypt          = require("bcrypt");
 const saltRounds      = 10;
 const dbConfig        = require("./config/db");
 const knex            = require('knex')({ client: 'pg', connection: dbConfig });
+const dataHelpers     = require("./lib/util/data-helpers");   // saveMaps & getMaps
 
 app.set("view engine", "ejs");
 app.set('trust proxy', 1);
@@ -31,7 +31,6 @@ app.use(session({
 // ===============================
 
 //=============== Middleware ====================
-app.use(cookieParser()); // do we need it if we are changing it to express-session from cookie-session??
 
 app.use((req, res, next) => {
   res.locals.current_user = null;
