@@ -5,8 +5,8 @@ $(function () {
   newMapBtn.on('click', function (event) {
 
     templateVars = {
-      mapCenterLat: map.getCenter().lat(),
-      mapCenterLng: map.getCenter().lng(),
+      mapCentreLat: map.getCenter().lat(),
+      mapCentreLng: map.getCenter().lng(),
       mapZoom: map.getZoom(),
       mapPoints: points
     }

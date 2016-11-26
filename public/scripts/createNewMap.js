@@ -1,5 +1,6 @@
 let map = {};
-let points = [];
+let pointsArr = [];
+let markerArr = [];
 
 function createNewMap () {
   var mapOptions = {
@@ -10,13 +11,26 @@ function createNewMap () {
 
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
+
   map.addListener('click', function(e) {
     // placeMarkerAndPanTo(e.latLng, map);
-    marker(e.latLng, map);
-    points.push({
+    let thisMarker = marker(e.latLng, map);
+    console.log(thisMarker);
+
+    pointsArr.push({
+      mkr: thisMarker,
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
     });
+
+    markerArr.push(thisMarker);
+
+
+    // if (currentPointId > 0) {
+    //   removeMarker(markerArr[0]);
+    // }
+
+
   });
 
   autoCompleteSearch(map);
