@@ -22,8 +22,8 @@ $(function () {
         console.log('SUCCESS');
       }
     });
-
   });
+
 
 });
 
@@ -47,4 +47,3 @@ function conditionData (pointsArr) {
       //console.log("AFTER", marker);
   });
 }
-
