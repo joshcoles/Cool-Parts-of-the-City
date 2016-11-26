@@ -30,7 +30,9 @@ app.use(session({
 // app.use(morgan('combined'))
 // ===============================
 
-//=============== Middleware ====================
+//     +---------------------------+
+//     |     locals middleware     |
+//     +---------------------------+
 
 app.use((req, res, next) => {
   res.locals.current_user = null;
@@ -50,7 +52,9 @@ app.use((req, res, next) => {
   }
 })
 
-// User authentication middleware. Working, but we don't have a way to activate logged_in yet.
+//     +-----------------------------------+
+//     |     whitelist page middleware     |
+//     +-----------------------------------+
 
 const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
 
@@ -65,6 +69,100 @@ app.use(function(req, res, next) {
   }
     console.log("I'm working!");
     next();
+});
+
+// ============================================
+
+//         +-----------------------+
+//         |   user registration   |
+//         +-----------------------+
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.post("/register", (req, res) => {
+  const input = req.body;
+
+  if (input.email === "" || input.username === "" || input.password === "") {
+    res.status(400).send("You are missing some inputs man")
+  } else {
+
+    knex.select('*').from('users').where('username', input.username).asCallback(function (err, rows) {
+      if (err) throw err;
+      if (rows.length !== 0) {
+        res.status(400).send("Username unavaileble")
+      } else {
+        knex.select('*').from('users').where('email', input.email).asCallback(function (err, rows) {
+          if (err) throw err;
+          if (rows.length !== 0) {
+            res.status(400).send("Email unavailable")
+          } else {
+            let enteredUsername   = input.username;
+            let enteredEmail      = input.email;
+            let enteredPassword   = input.password;
+            bcrypt.hash(enteredPassword, saltRounds, (err, hash) => {
+              const newUser = {
+                username: enteredUsername,
+                email:    enteredEmail,
+                password: hash
+              };
+              console.log("newUser data:", newUser);
+              knex.insert(newUser).into('users').asCallback(function (err, rows) {
+                if (err) { console.log (err); throw err; }
+              });
+            })
+            res.redirect("/");
+          }
+        });
+      }
+    });
+  }
+});
+
+//         +------------------------+
+//         |     login & logout     |
+//         +------------------------+
+
+app.get("/", (req, res) => {
+  res.render("login");
+});
+
+app.post("/", (req, res) => {
+  const input = req.body
+  var usernameFound    = "";
+  var passwordFound    = "";
+
+  knex.select('*').from('users').where('username', input.username).asCallback(function (err, rows) {
+    if (err) throw err;
+    if (rows.length !== 0) {
+      usernameFound = rows[0].username;
+      passwordFound = rows[0].password;
+      if (input.username === usernameFound) {
+        console.log("email found in the db");
+        bcrypt.compare(input.password, passwordFound, (err, passwordMatch) => {
+          if (passwordMatch) {
+            req.session.username = input.username;
+            res.redirect(`/users/${input.username}`);
+            return;
+          } else {
+            console.log("wrong password");
+            res.status(401).send("Invalid username or password");
+            return;
+          }
+        })
+      } else {
+        console.log("username not found");
+        res.status(401).send("Invalid username or password");
+        return;
+      }
+    }
+  });
+});
+
+app.post("/logout", (req, res) => {
+  req.session.username = undefined;
+  res.redirect("/")
 });
 
 
@@ -110,131 +208,29 @@ app.get("/users/:username/create", (req, res) => {
 
 app.post("/users/:username/create", (req, res) => {
 
-  console.log('success on server');
-  let mapTemplate = {
-    centre_x: req.body.mapCentreLat,
-    centre_y: req.body.mapCentreLng,
-    user_id: null,
-    zoom: req.body.mapZoom,
-    region: 'a region',
-    keyword: 'a keyword'
-  };
-
-  let mapPoints = req.body.mapPoints;
-
-  knex('maps').insert(mapTemplate).returning('id')
-    .then((id) => {
-      mapPoints.forEach((point) => {
-        let pointTemplate = {
-          lng: point.lng,
-          lat: point.lat,
-          map_id: parseInt(id),
-          name: 'a name',
-          description: 'a description',
-          img_url: 'the url'
-        };
-        knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
-          if (err) throw err;
-        });
-      });
-    })
-    .asCallback(function (err, rows) {
-      if (err) throw err;
-    });
-});
-
-
-//         +---------------------+
-//         |  user registration  |
-//         +---------------------+
-
-app.get("/register", (req, res) => {
-  res.render("register");
-});
-
-app.post("/register", (req, res) => {
-  const input = req.body;
-
-  if (input.email === "" || input.username === "" || input.password === "") {
-    res.status(400).send("You are missing some inputs man")
-  } else {
-
-    knex.select('*').from('users').where('username', input.username).asCallback(function (err, rows) {
-      if (err) throw err;
-      if (rows.length !== 0) {
-        res.status(400).send("Username unavaileble")
-      } else {
-        knex.select('*').from('users').where('email', input.email).asCallback(function (err, rows) {
-          if (err) throw err;
-          if (rows.length !== 0) {
-            res.status(400).send("Email unavailable")
-          } else {
-            let enteredUsername   = input.username;
-            let enteredEmail      = input.email;
-            let enteredPassword   = input.password;
-            bcrypt.hash(enteredPassword, saltRounds, (err, hash) => {
-              const newUser = {
-                username: enteredUsername,
-                email:    enteredEmail,
-                password: hash
-              };
-              console.log("newUser data:", newUser);
-              knex.insert(newUser).into('users').asCallback(function (err, rows) {
-                if (err) { console.log (err); throw err; }
-              });
-            })
-            res.redirect("/");
-          }
-        });
-      }
-    });
+  if (!req.body) {
+    res.status(400).json({ error: 'invalid request: no data in POST body'});
+    return;
   }
-});
 
-
-//         +------------------+
-//         |  login & logout  |
-//         +------------------+
-
-app.get("/", (req, res) => {
-  res.render("login");
-});
-
-app.post("/", (req, res) => {
-  const input = req.body
-  var usernameFound    = "";
-  var passwordFound    = "";
-
-  knex.select('*').from('users').where('username', input.username).asCallback(function (err, rows) {
-    if (err) throw err;
-    if (rows.length !== 0) {
-      usernameFound = rows[0].username;
-      passwordFound = rows[0].password;
-      if (input.username === usernameFound) {
-        console.log("email found in the db");
-        bcrypt.compare(input.password, passwordFound, (err, passwordMatch) => {
-          if (passwordMatch) {
-            req.session.username = input.username;
-            res.redirect(`/users/${input.username}`);
-            return;
-          } else {
-            console.log("wrong password");
-            res.status(401).send("Invalid username or password");
-            return;
-          }
-        })
-      } else {
-        console.log("username not found");
-        res.status(401).send("Invalid username or password");
-        return;
-      }
+  let mapData = {
+    mapTemplate: [{
+      user_id: null,
+      centre_x: req.body.mapCenterLng,
+      centre_y: req.body.mapCenterLat,
+      zoom: req.body.mapZoom
+    }],
+    coordinatesData: req.body.mapPoints
+  }
+  console.log("mapData: ", mapData);
+  dataHelpers.saveMaps(mapData, (err) => {
+    if (err) {
+      res.status(500).json({ err: err.message });
+    } else {
+      res.status(201).send();
     }
-  });
-});
+  })
 
-app.post("/logout", (req, res) => {
-  req.session.username = undefined;
-  res.redirect("/")
 });
 
 
@@ -248,7 +244,7 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', 68)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', 110)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
