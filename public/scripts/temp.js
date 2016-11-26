@@ -1,26 +1,99 @@
 let map = {};
 let markerArr = [];
 let allMyGoddamnInfoWindows = [];
-let postRoute = '/users/:username/create';
+let postRoute = '/users/:username/edit';
 
-function createNewMap () {
+function editMap(){
+  let data = JSON.parse(window.data);
+  drawMap(data);
+}
+
+function drawMap (data) {
+  let mapData = data.mapData;
+  let pointsData = data.pointsData;
+
   let mapOptions = {
-    center: new google.maps.LatLng(49.28, -123.11),
-    zoom: 14,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    center: new google.maps.LatLng(mapData.centre_x, mapData.centre_y),
+    zoom: mapData.zoom,
   };
 
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
   map.addListener('click', function(e) {
-    let thisMarker = marker(e.latLng.lat(), e.latLng.lng(), map);
+    let thisMarker = marker(e.latLng, map);
     markerArr.push(thisMarker);
   });
 
   autoCompleteSearch(map);
 
+  pointsData.forEach((point) => {
+    insertPointsOnMap (map, point);
+  });
   return map;
 }
+
+function insertPointsOnMap (myMap, point) {
+    let markerOptions = {
+      position: new google.maps.LatLng(point.lat, point.lng),
+      draggable: true,
+      id: point.id
+    };
+
+    let infoWindowOptions = {
+      content: markerOptions.id
+    }
+
+    let marker = new google.maps.Marker(markerOptions);
+    marker.setMap(myMap);
+    setUpEventListeners(marker);
+    markerArr.push(marker);
+
+    var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+
+    google.maps.event.addListener(marker,'click', function() {
+      infoWindow.open(myMap, marker);
+    });
+
+    return marker;
+}
+
+
+function setUpEventListeners (marker) {
+  google.maps.event.addListener(marker, 'click', updatemarkerArr);
+  google.maps.event.addListener(marker, 'dragend', updatemarkerArr);
+
+  function updatemarkerArr (event) {
+    let index = searchForPointBy(this.id);
+    markerArr[index] = this;
+    console.log("AFTER: ", markerArr[2].getPosition().lat(), markerArr[2].getPosition().lng());
+    return 0;
+  }
+}
+
+function searchForPointBy(id) {
+  let output = -1;
+  markerArr.forEach((marker, index) => {
+    if (marker.id === id) output = index;
+  });
+  return output;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function closeAllGoddamnInfoWindows() {
@@ -30,15 +103,12 @@ function closeAllGoddamnInfoWindows() {
   }
 }
 
-function marker(lat, lng, map) {
-  const latLng = new google.maps.LatLng(lat, lng);
-  console.log(latLng);
+function marker(latLng, map) {
+
   const markerOptions = {
     position: latLng,
-    map: map,
     draggable: true
   };
-
 
   const $form = document.importNode($('.new-poi-form')[0], true); // duplicate DOM node because googleMaps
   const thisMarker = new google.maps.Marker(markerOptions);
@@ -55,7 +125,6 @@ function marker(lat, lng, map) {
   }
 
   function markerClicked(event) {
-    //closeAllGoddamnInfoWindows();
     const infoWindowOptions = { content: $form };
     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
     allMyGoddamnInfoWindows.push(infoWindow);
@@ -107,12 +176,3 @@ function searchForMarker(marker) {
 }
 
 
-// function removeMarker(marker) {
-//   marker.setMap(null);
-//   let index = searchForMarker(marker);
-//   // markerArr[index].setMap(null);
-//   if (index > -1) {
-//     markerArr.splice(index, 1);
-//     markerArr.splice(index, 1);
-//   }
-// }

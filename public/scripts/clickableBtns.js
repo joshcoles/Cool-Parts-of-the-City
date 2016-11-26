@@ -1,22 +1,19 @@
 $(function () {
   // action for when compose is clicked
-  let newMapBtn = $('.saveNewMapBtn');
+  let newMapBtn = $('.mapDataChangeBtn');
 
   newMapBtn.on('click', function (event) {
-    // conditionData(markerArr);
-
-    console.log("SAVING MAP: ", markerArr);
 
     templateVars = {
       mapCentreLat: map.getCenter().lat(),
       mapCentreLng: map.getCenter().lng(),
       mapZoom: map.getZoom(),
-      mapPoints: conditionNewMapData (markerArr)
+      mapPoints: conditionMapData (markerArr)
     }
 
     $.ajax({
       type: 'POST',
-      url: '/users/:username/create',
+      url: postRoute,
       data: templateVars,
       success: function () {
         console.log('SUCCESS');
@@ -26,21 +23,21 @@ $(function () {
 
 });
 
-function conditionNewMapData (markerArr) {
-  let requestPoints = [];
+function conditionMapData (markerArr) {
+  let requestMarkers = [];
   markerArr.forEach((marker, index) => {
-    requestPoints.push({
+    requestMarkers.push({
       lat: marker.getPosition().lat(),
       lng: marker.getPosition().lng(),
     });
 
     if (!marker.infoBox) {
-      requestPoints[index].infoBox = {
+      requestMarkers[index].infoBox = {
         title: "yyy",
         description: "yyy",
         url: "yyy"
       }
     } else { requestPoints[index].infoBox = marker.infoBox; }
   });
-  return requestPoints;
+  return requestMarkers;
 }

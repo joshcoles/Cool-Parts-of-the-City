@@ -128,7 +128,7 @@ app.post("/users/:username/create", (req, res) => {
 app.get("/users/:username/:mapid", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 76)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 104)
 
     .asCallback(function (err, rows) {
     if (err) throw err;
@@ -147,6 +147,41 @@ app.get("/users/:username/:mapid", (req, res) => {
   });
 
 });
+
+
+app.post("/users/:username/edit", (req, res) => {
+  console.log('Editing map....');
+  let map_id = 104;
+  let mapTemplate = {
+    centre_x: req.body.mapCentreLat,
+    centre_y: req.body.mapCentreLng,
+    user_id: null,
+    zoom: req.body.mapZoom,
+    region: 'a region edited',
+    keyword: 'a keyword edited'
+  };
+
+  let mapPoints = req.body.mapPoints;
+
+  knex('maps').where('id', map_id).update(mapTemplate).then((resp) => {
+    knex('coordinates').where('map_id', map_id).del().then((resp) => {
+      mapPoints.forEach((point) => {
+        let pointTemplate = {
+          lng: point.lng,
+          lat: point.lat,
+          map_id: map_id,
+          name: "edited name",
+          description: "edited description",
+          img_url: 'eidted url'
+        };
+        knex('coordinates').insert(pointTemplate).asCallback(function (err, row) {
+          if (err) throw err;
+        });
+      });
+    });
+  });
+});
+
 
 
 //         +---------------------+

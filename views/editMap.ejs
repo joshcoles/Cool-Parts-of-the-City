@@ -1,48 +1,81 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Simple Map</title>
-  <meta name="viewport" content="initial-scale=1.0">
-  <meta charset="utf-8">
-  <style>
-    /* Always set the map height explicitly to define the size of the div
-     * element that contains the map. */
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-
-    #map {
-      height: 70%;
-      width: 70%;
-      margin: 0;
-    }
-
-    #autocomplete {
-      width: 50%;
-      height: 25px;
-    }
-  </style>
-
-  <!-- External JS -->
-  <script type="text/javascript" src="/vendor/jquery-3.1.1.min.js"></script>
-
-</head>
+  <% include ./partials/_head %>
+<head></head>
+<% include ./partials/_header %>
+<script type="text/javascript" src="/vendor/jquery-3.1.1.min.js"></script>
 
 <body>
 
   <div>
     <input class="form-control input-sm" type="text" id="autocomplete">
-    <button class="editMap button btn-success btn-md" type="button">Save Changes</button>
+    <button class="mapDataChangeBtn button btn-success btn-md" type="button">Save Changes</button>
   </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="container">
+    <form class="info-window-form container form-group new-poi-form">
+      <input class="form-control input-sm xx" id="info-window-form-name" type="text" name="title" placeholder="Title"><br>
+      <input class="form-control input-sm yy" id="info-window-form-description" type="text" name="description" placeholder="A short description of this place."><br>
+      <input class="form-control input-sm zz" id="info-window-form-url" type="text" name="url" placeholder="http://">
+      <input class="submitInfoBox button btn-success btn-md" type="submit">
+    </form>
+
+    <div class="container">
+      <div class="row">
+
+          <h4>Choose a map</h4>
+          <div class="list-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            <a href="#" class="list-group-item active">All Maps</a>
+            <a href="#" class="list-group-item">My Maps</a>
+            <a href="#" class="list-group-item">My Favs</a>
+          </div>
+
+        <div id="fuckoff" class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+          <h4>Map</h4>
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <div id="map">
     <script type="text/javascript">
         var data = <%- JSON.stringify(data) %>;
         window.data = data;
     </script>
-    <script src="/scripts/clickableBtns.js"></script>
+    <script src="/scripts/autoCompleteSearch.js"></script>
     <script src="/scripts/editMap.js"></script>
+    <script src="/scripts/clickableBtns.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=editMap"
     async defer"></script>
   </div>
