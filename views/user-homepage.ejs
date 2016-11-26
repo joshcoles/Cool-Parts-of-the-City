@@ -17,11 +17,23 @@
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
           <h4>Map</h4>
           <div id="map"></div>
+
         </div>
       </div>
     </div>
   </div>
-
+    <script src="/scripts/drawMap.js"></script>
+    <script src="/scripts/insertPointOnMap.js"></script>
+<!--     <script src="/scripts/getCoordinatesOnEvent.js"></script> -->
+    <script src="/scripts/setUpEventListeners.js"></script>
+    <script type="text/javascript">
+        var data = <%- JSON.stringify(data) %>;
+        window.data = data;
+    </script>
+    <script src="/scripts/clickableBtns.js"></script>
+    <script src="/scripts/renderMap.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=renderMap"
+    async defer"></script>
   <script src="/scripts/drawMap.js"></script>
   <script src="/scripts/insertPointOnMap.js"></script>
 <!--   <script src="/scripts/getCoordinatesOnEvent.js"></script> -->

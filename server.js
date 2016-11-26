@@ -71,16 +71,6 @@ app.use((req, res, next) => {
 
 
 
-
-
-
-
-// homepage
-app.get("/", (req, res) => {
-  res.render("login");
-
-});
-
 // temp route for map development purposes for Behzad
 app.get("/renderMap", (req, res) => {
   let mapData = {};
@@ -242,6 +232,7 @@ app.post("/", (req, res) => {
 
 app.post("/logout", (req, res) => {
   req.session.username = undefined;
+  res.redirect("/")
 });
 
 
@@ -251,18 +242,32 @@ app.get("/users", (req, res) => {
 });
 
 // user page
-app.get("/users/:id", (req, res) => {
-  res.render("user-homepage")
+app.get("/users/:username", (req, res) => {
+
+  let mapData = {};
+  let pointsData = {};
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', 66)
+    .asCallback(function (err, rows) {
+    if (err) throw err;
+    mapData = rows[0];
+    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
+      if (err) throw err;
+      pointsData = rows;
+      let dataTemplate = {
+          mapData: mapData,
+          pointsData: pointsData
+      };
+      dataTemplate = JSON.stringify(dataTemplate);
+      res.render('user-homepage', {data: dataTemplate});
+    });
+  });
+
 
 });
 
-//
-app.get("/users/:id/", (req, res) => {
-
-});
 
 // edit post
-app.post("/users/:id/:postid", (req, res) => {
+app.post("/users/:username/:mapid", (req, res) => {
 
 });
 
