@@ -88,7 +88,8 @@ app.get("/renderMap", (req, res) => {
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
-    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
+    knex('coordinates').where('map_id', rows[0].id)
+    .asCallback(function (err, rows) {
       if (err) throw err;
       pointsData = rows;
       let dataTemplate = {
@@ -133,11 +134,14 @@ app.post("/users/:username/create", (req, res) => {
 
   knex('maps').insert(mapTemplate).returning('id')
     .then((id) => {
-      mapPoints.forEach((item) => {
+      mapPoints.forEach((point) => {
         let pointTemplate = {
-          longitude: item.lng,
-          latitude: item.lat,
-          map_id: parseInt(id)
+          lng: point.lng,
+          lat: point.lat,
+          map_id: parseInt(id),
+          name: 'a name',
+          description: 'a description',
+          img_url: 'the url'
         };
         knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
           if (err) throw err;
