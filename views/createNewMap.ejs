@@ -3,21 +3,16 @@
   <% include ./partials/_head %>
   <body>
     <% include ./partials/_header %>
+    <div>
+      <input class="form-control input-sm" type="text" id="autocomplete">
+      <button class="saveNewMapBtn button btn-success btn-md" type="button">Save Map</button>
+    </div>
     <div class="container">
-      <!-- Info Window Form -->
-      <!-- <form class="info-window-form container form-group new-poi-form" action="" method="POST">
-        <input class="form-control input-sm" id="info-window-form-name" type="text" name="name" placeholder="Title"><br>
-        <input class="form-control input-sm" id="info-window-form-description" type="text" name="description" placeholder="A short description of this place."><br>
-        <input class="form-control input-sm" id="info-window-form-url" type="url" name="image-url" placeholder="http://">
-        <button class="button btn-success btn-md" type="submit">Submit</button>
-      </form> -->
-
-
       <form class="info-window-form container form-group new-poi-form">
-        <input class="form-control input-sm" id="info-window-form-name" type="text" name="title" placeholder="Title"><br>
-        <input class="form-control input-sm" id="info-window-form-description" type="text" name="description" placeholder="A short description of this place."><br>
-        <input class="form-control input-sm" id="info-window-form-url" type="text" name="url" placeholder="http://">
-        <button class="button btn-success btn-md" type="submit">Submit</button>
+        <input class="form-control input-sm xx" id="info-window-form-name" type="text" name="title" placeholder="Title"><br>
+        <input class="form-control input-sm yy" id="info-window-form-description" type="text" name="description" placeholder="A short description of this place."><br>
+        <input class="form-control input-sm zz" id="info-window-form-url" type="text" name="url" placeholder="http://">
+        <input class="submitInfoBox button btn-success btn-md" type="submit">
       </form>
 
       <div class="container">
@@ -30,11 +25,8 @@
               <a href="#" class="list-group-item">My Favs</a>
             </div>
 
-          <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-            <form>
-              <input class="form-control input-sm" type="text" id="autocomplete">
-              <button class="newMapBtn button btn-success btn-md">Save Map</button>
-            </form>
+          <div id="fuckoff" class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+
             <h4>Map</h4>
             <div id="map"></div>
           </div>
