@@ -1,3 +1,12 @@
+var allMyGoddamnInfoWindows = [];
+
+function closeAllGoddamnInfoWindows(){
+  while (allMyGoddamnInfoWindows.length > 0){
+    allMyGoddamnInfoWindows[0].close();
+    allMyGoddamnInfoWindows.shift();
+  }
+}
+
 function marker(latLng, map) {
 
   const markerOptions = {
@@ -6,12 +15,14 @@ function marker(latLng, map) {
     draggable: true
   };
 
-  const $form = $('.new-poi-form')[0];
+  const $form = document.importNode($('.new-poi-form')[0], true); // duplicate DOM node because googleMaps
+
   const marker = new google.maps.Marker(markerOptions);
   let infoWindow;
-  // const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
 
   function createMarker() {
+    closeAllGoddamnInfoWindows()
+
     marker.setMap(map);
     map.panTo(latLng);
 
@@ -20,9 +31,9 @@ function marker(latLng, map) {
     };
 
     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    allMyGoddamnInfoWindows.push(infoWindow);
 
     infoWindow.open(map, marker);
-
   }
 
   // HELPER
@@ -39,43 +50,21 @@ function marker(latLng, map) {
   // =======
 
   function markerClicked(event) {
+    closeAllGoddamnInfoWindows()
 
     const infoWindowOptions = {
       content: $form
     };
 
     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    allMyGoddamnInfoWindows.push(infoWindow);
 
     infoWindow.open(map, marker);
   }
 
-  function mapClickedWhileInfoWindowIsUp(event) {
-    // marker.hide();
-    if (infoWindow) {
-    infoWindow.close();
-    }
-  }
-
-
   function bindEvents() {
     google.maps.event.addListener(marker, 'click', markerClicked);
-    google.maps.event.addListener(marker, 'dragend', markerClicked);
-    google.maps.event.addListener(map, 'click', mapClickedWhileInfoWindowIsUp);
-
-
-
-    $('body').submit('#map form', function(e) {
-      e.preventDefault();
-      let $form = $(this).find('#map form');
-      let formData = {
-        description: $form.find('input[name="description"]').val()
-      };
-      console.log(formData);
-
-      $.post('/markers', formData).done(function(marker) {
-
-      });
-    });
+    google.maps.event.addListener(marker, 'dragend', markerClicked);    // probably fine.  but why?
   }
 
   function init() {
@@ -86,40 +75,6 @@ function marker(latLng, map) {
   init();
 
 };
-
-
-
-// function placeMarkerAndPanTo(latLng, map) {
-
-
-
-//  // map.panTo(latLng);
-//     setUpEventListeners(marker);
-//  // return marker;
-//     // debugger;
-
-
-
-//     var infoWindowOptions = {
-//       content: 'test'
-//     }
-
-
-
-//     console.log(map);
-
-
-//     var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-
-//     google.maps.event.addListener(marker,'click', function() {
-//       console.log("I'm firing my lazer");
-//       infoWindow.open(map, marker);
-//     });
-
-//     setUpEventListeneners(marker);
-
-//     return marker;
-// }
 
 
 
