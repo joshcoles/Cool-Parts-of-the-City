@@ -6,7 +6,26 @@ $(function () {
   newMapBtn.on('click', function (event) {
     let requestMarkers = conditionMapData(markerArr).outArr;
     let goodData = conditionMapData(markerArr).outBool;
-    if (markerArr.length > 0 && goodData) {
+
+    if (action === 'editMap' && markerArr.length > 0) {
+      templateVars = {
+        mapTitle: mapTitleInput.val(),
+        mapCentreLat: map.getCenter().lat(),
+        mapCentreLng: map.getCenter().lng(),
+        mapZoom: map.getZoom(),
+        mapPoints: requestMarkers
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: postRoute,
+        data: templateVars,
+        success: function () {
+          console.log('SUCCESS');
+        }
+      });
+
+    } else if (action === 'newMap' && markerArr.length > 0 && goodData) {
       templateVars = {
         mapTitle: mapTitleInput.val(),
         mapCentreLat: map.getCenter().lat(),
@@ -26,23 +45,23 @@ $(function () {
     } else alert ("Please fill in the map title and info-box info for each point");
   });
 
-  // $('#xxx').on('click', '.submitInfoBox', function(e) {
-  //   e.preventDefault();
-  //   console.log("being clicked: ", thisMarker);
-  //   let $form = $(this).parent();
-  //   let formData = {
-  //     title: $form.find('input[name="title"]').val(),
-  //     description: $form.find('input[name="description"]').val(),
-  //     url: $form.find('input[name="url"]').val()
-  //   };
+  $('body').on('click', '.submitInfoBox', function(e) {
+    e.preventDefault();
+    console.log("being clicked: ", thisMarker);
+    let $form = $(this).parent();
+    let formData = {
+      title: $form.find('input[name="title"]').val(),
+      description: $form.find('input[name="description"]').val(),
+      url: $form.find('input[name="url"]').val()
+    };
 
 
-  //   indexInmarkerArr = searchForMarker(infoWindow.anchor);
-  //   if (indexInmarkerArr > -1) {
-  //     markerArr[indexInmarkerArr]['infoBox'] = formData;
-  //   }
-  //   closeAllGoddamnInfoWindows();
-  // });
+    indexInmarkerArr = searchForMarker(infoWindow.anchor);
+    if (indexInmarkerArr > -1) {
+      markerArr[indexInmarkerArr]['infoBox'] = formData;
+    }
+    closeAllGoddamnInfoWindows();
+  });
 
 
 });

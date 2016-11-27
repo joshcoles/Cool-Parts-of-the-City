@@ -1,6 +1,7 @@
 let map = {};
 let markerArr = [];
 let postRoute = '/users/:username/edit';
+let action = 'editMap';
 
 function editMap(){
   let data = JSON.parse(window.data);
