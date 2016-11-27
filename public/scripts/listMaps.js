@@ -1,12 +1,15 @@
 $(function () {
   function listMaps() {
     // $.post('/listMapss', '135', function () {console.log('success')} );
-    let listOfMaps = window.data;
+    console.log(typeof(window.data));
+    let data = JSON.parse(window.data);
+    let listOfMaps = data.list;
+    //console.log(listOfMaps);
     let displayBox = $("#displayBox");
 
     displayBox.on('click', '.mapListButtons', function (event) {
       event.preventDefault();
-      console.log(this.getAttribute('data-button'));
+      //console.log(this.getAttribute('data-button'));
       $.ajax({
         type: 'POST',
         url: '/listMaps',

@@ -24,7 +24,7 @@ app.use(session({
 }));
 
 
-var tempMapId = 134;
+var tempMapId = 148;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -60,19 +60,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-app.use(function(req, res, next) {
-  console.log("Authorizing...");
-  console.log("My req.url: " + req.url);
-  if(!WHITELISTED_PAGES.includes(req.url)) {
-    const authorized = req.session.current_user
-    if(!authorized) {
-      res.redirect("/")
-    }
-  }
-    console.log("I'm working!");
-    next();
-});
+// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+// app.use(function(req, res, next) {
+//   console.log("Authorizing...");
+//   console.log("My req.url: " + req.url);
+//   if(!WHITELISTED_PAGES.includes(req.url)) {
+//     const authorized = req.session.current_user
+//     if(!authorized) {
+//       res.redirect("/")
+//     }
+//   }
+//     console.log("I'm working!");
+//     next();
+// });
 
 
 // ========================================== //
@@ -190,7 +190,6 @@ app.post("/users/:username/create", (req, res) => {
 
   let mapData = {
     mapTemplate: [{
-
       user_id: req.session.current_user.id,
       centre_x: req.body.mapCentreLat,
       centre_y: req.body.mapCentreLng,
@@ -200,7 +199,7 @@ app.post("/users/:username/create", (req, res) => {
     }],
     coordinatesData: req.body.mapPoints
   }
-console.log("mapData: ", mapData);
+
   dataHelpers.saveMaps(mapData, (err) => {
     if (err) {
       res.status(500).json({ err: err.message });
@@ -210,30 +209,6 @@ console.log("mapData: ", mapData);
   })
 
 });
-
-
-
-//     +---------------------------+
-//     |     list maps UNDER DEV   |
-//     +---------------------------+
-
-app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
-    if (err) throw err;
-    res.render("listMaps", {data: rows});
-    console.log(rows);
-  });
-});
-
-
-app.post("/listMaps", (req, res) => {
-  console.log("HERE: ", typeof(tempMapId));
-  tempMapId = req.body.mapId;
-  res.send({redirect: `/users/behzad`});
-});
-
-
-
 
 //         +--------------------------+
 //         |Fixes url fron info window|
@@ -352,6 +327,27 @@ app.get("/users", (req, res) => {
 
 });
 
+
+//     +---------------------------+
+//     |     list maps UNDER DEV   |
+//     +---------------------------+
+
+app.get("/listMaps", (req, res) => {
+  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
+    if (err) throw err;
+    res.render("listMaps", {data: rows});
+    console.log(rows);
+  });
+});
+
+app.post("/listMaps", (req, res) => {
+  console.log("HERE: ", typeof(tempMapId));
+  tempMapId = req.body.mapId;
+  res.send({redirect: `/users/behzad`});
+});
+
+
+
 // user page UNDER DEVELOPMENT
 app.get("/users/:username", (req, res) => {
 
@@ -375,17 +371,31 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId)
+  let dataTemplate = {};
+  let list;
+
+  knex('maps').select('id', 'title').where('user_id', 1).asCallback((err, rows) => {
+    if (err) throw err;
+    console.log(rows);
+    list = rows;
+  });
+
+
+
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId).andWhere('user_id', 1)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
+
     knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
       if (err) throw err;
       pointsData = rows;
       let dataTemplate = {
           mapData: mapData,
-          pointsData: pointsData
+          pointsData: pointsData,
+          list: list
       };
+      console.log(dataTemplate);
       dataTemplate = JSON.stringify(dataTemplate);
       res.render('user-homepage', {data: dataTemplate});
     });
