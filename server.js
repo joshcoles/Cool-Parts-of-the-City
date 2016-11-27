@@ -227,9 +227,9 @@ app.post("/users/:username/create", (req, res) => {
 
   let mapData = {
     mapTemplate: [{
-      user_id: null,
-      centre_x: req.body.mapCentreLng,
-      centre_y: req.body.mapCentreLat,
+      user_id: req.session.current_user.id,
+      centre_x: req.body.mapCentreLat,
+      centre_y: req.body.mapCentreLng,
       zoom: req.body.mapZoom,
       region: 'a region',
       keyword: 'a keyword'
