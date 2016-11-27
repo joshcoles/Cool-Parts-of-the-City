@@ -22,3 +22,8 @@ background-color: #577492;
 color: white;
 border-radius: 5px;
 }
+
+.point-info-div img {
+  height: 150px;
+  width: 150px;
+}
