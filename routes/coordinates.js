@@ -7,15 +7,21 @@
 
   coordinatesRoutes.get("/users/:username", (req, res) => {
 
-    let reqData = `username = ${req.params.username}`
+    let reqData = {
+      whereData: [{
+        where1st: "user_id",
+        where2nd: req.session.current_user.id
+      }]
+    }
 
-    dataHelpers.getCoordinates(reqData, (err, coordinates) => {
+    dataHelpers.getMaps(reqData, (err, coordinates) => {
       if(err) {
         res.status(500).json({ error: err.message });
       } else {
         res.json(coordinates);
       }
     });
+
   });
 
 

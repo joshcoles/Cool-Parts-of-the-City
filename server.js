@@ -61,19 +61,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-// app.use(function(req, res, next) {
-//   console.log("Authorizing...");
-//   console.log("My req.url: " + req.url);
-//   if(!WHITELISTED_PAGES.includes(req.url)) {
-//     const authorized = req.session.current_user
-//     if(!authorized) {
-//       res.redirect("/")
-//     }
-//   }
-//     console.log("I'm working!");
-//     next();
-// });
+const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+app.use(function(req, res, next) {
+  console.log("Authorizing...");
+  console.log("My req.url: " + req.url);
+  if(!WHITELISTED_PAGES.includes(req.url)) {
+    const authorized = req.session.current_user
+    if(!authorized) {
+      res.redirect("/")
+    }
+  }
+    console.log("I'm working!");
+    next();
+});
 
 
 // ========================================== //
@@ -340,28 +340,48 @@ app.get("/renderMap", (req, res) => {
 // users page
 app.get("/users", (req, res) => {
 
+
+
+
+
 });
 
 // user page UNDER DEVELOPMENT
 app.get("/users/:username", (req, res) => {
 
+// let reqData = {
+//       whereData: [{
+//         where1st: "user_id",
+//         where2nd: req.session.current_user.id
+//       }]
+//     }
+//     dataHelpers.getMaps(reqData, (err, coordinates) => {
+//       if(err) {
+//         res.status(500).json({ error: err.message });
+//       } else {
+//         console.log(req.body);
+//         res.render('renderMap', { data: dataTemplate });
+//       }
+//     ;
+//     });
+
+
+
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('user_id', req.session.current_user.id)
-
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
-    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, coordinates) {
+    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
       if (err) throw err;
-      pointsData = coordinates;
-      var data = JSON.stringify({mapData: mapData, pointsData: pointsData})
+      pointsData = rows;
       let dataTemplate = {
-          mapRows: rows,
-          data: data
+          mapData: mapData,
+          pointsData: pointsData
       };
-      // dataTemplate = JSON.stringify(dataTemplate);
-      res.render('user-homepage', dataTemplate);
+      dataTemplate = JSON.stringify(dataTemplate);
+      res.render('user-homepage', {data: dataTemplate});
     });
   });
 
