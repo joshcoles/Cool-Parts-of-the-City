@@ -24,7 +24,7 @@ app.use(session({
 }));
 
 
-const tempMapId = 113;
+const tempMapId = 128;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -74,7 +74,7 @@ app.use((req, res, next) => {
 
 // temp reoute for development purposes for Behzad
 app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'keyword', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
+  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
     if (err) throw err;
     res.render("listMaps", {data: rows});
     console.log(rows);
@@ -155,7 +155,7 @@ app.post("/users/:username/create", (req, res) => {
 app.get("/users/:username/:mapid", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', tempMapId)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
 
     .asCallback(function (err, rows) {
     if (err) throw err;
@@ -314,25 +314,26 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', tempMapId)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
     knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
       if (err) throw err;
       pointsData = rows;
+      var data = JSON.stringify({mapData: mapData, pointsData: pointsData})
       let dataTemplate = {
-          mapData: mapData,
-          pointsData: pointsData
+          mapRows: rows,
+          data: data
       };
-      dataTemplate = JSON.stringify(dataTemplate);
-      res.render('user-homepage', {data: dataTemplate});
+      // dataTemplate = JSON.stringify(dataTemplate);
+      res.render('user-homepage', dataTemplate);
     });
   });
 
 
-});
 
+});
 
 // edit post
 app.post("/users/:username/:mapid", (req, res) => {
