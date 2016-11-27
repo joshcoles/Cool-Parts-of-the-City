@@ -24,7 +24,9 @@ app.use(session({
 }));
 
 
-const tempMapId = 128;
+
+const tempMapId = 129;
+
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -33,13 +35,15 @@ const tempMapId = 128;
 // app.use(morgan('combined'))
 // ===============================
 
-//=============== Middleware ====================
+//     +---------------------------+
+//     |     locals middleware     |
+//     +---------------------------+
 
 app.use((req, res, next) => {
 
   res.locals.current_user = null;
-  if (req.session.username) {
-    knex.select('*').from('users').where('username', req.session.username).asCallback(function(err, rows) {
+  if (req.session.current_user) {
+    knex.select('*').from('users').where('username', req.session.current_user.username).asCallback(function(err, rows) {
       if (err) {
         console.log(err);
         next();
@@ -54,166 +58,31 @@ app.use((req, res, next) => {
   }
 })
 
+//     +-----------------------------------+
+//     |     whitelist page middleware     |
+//     +-----------------------------------+
 
-// User authentication middleware. Working, but we don't have a way to activate logged_in yet.
-
-// const WHITELISTED_PAGES = ["/", "/register"]
-
-// app.use(function(req, res, next) {
-//   console.log("Authorizing...");
-//   console.log("My req.url: " + req.url);
-//   if(!WHITELISTED_PAGES.includes(req.url)) {
-//     const logged_in = req.session.user_id
-//     if(!logged_in) {
-//       res.redirect("/")
-//     }
-//   }
-//     console.log("I'm working!");
-//     next();
-// });
-
-// temp reoute for development purposes for Behzad
-app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
-    if (err) throw err;
-    res.render("listMaps", {data: rows});
-    console.log(rows);
-  });
-});
-
-
-
-
-
-
-
-//         +--------------------------+
-//         |Fixes url fron info window|
-//         +--------------------------+
-
-
-function fixURL(originalURL) {
-  if (!(originalURL.includes("://"))) {
-    originalURL = "http://" + originalURL;
+const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+app.use(function(req, res, next) {
+  console.log("Authorizing...");
+  console.log("My req.url: " + req.url);
+  if(!WHITELISTED_PAGES.includes(req.url)) {
+    const authorized = req.session.current_user
+    if(!authorized) {
+      res.redirect("/")
+    }
   }
-  return originalURL;
-}
-
-
-
-
-
-
-//         +---------------------+
-//         |CREATE GET AND POST |
-//         +---------------------+
-app.get("/users/:username/create", (req, res) => {
-  res.render("createNewMap");
+    console.log("I'm working!");
+    next();
 });
 
 
+// ========================================== //
 
-app.post("/users/:username/create", (req, res) => {
-  console.log('success on server');
-  let mapTemplate = {
-    centre_x: req.body.mapCentreLat,
-    centre_y: req.body.mapCentreLng,
-    user_id: null,
-    zoom: req.body.mapZoom,
-    region: 'a region',
-    keyword: 'a keyword'
-  };
+//         +-----------------------+
+//         |   user registration   |
+//         +-----------------------+
 
-  let mapPoints = req.body.mapPoints;
-
-  knex('maps').insert(mapTemplate).returning('id')
-    .then((id) => {
-      mapPoints.forEach((point) => {
-        let pointTemplate = {
-          lng: point.lng,
-          lat: point.lat,
-          map_id: parseInt(id),
-          name: point.infoBox.title,
-          description: point.infoBox.description,
-          img_url: fixURL(point.infoBox.url)
-        };
-        knex('coordinates').insert(pointTemplate).asCallback(function (err, rows) {
-          if (err) throw err;
-        });
-      });
-    })
-    .asCallback(function (err, rows) {
-      if (err) throw err;
-    });
-});
-
-
-//         +---------------------+
-//         |   DEVELOPMENT EDIT  |
-//         +---------------------+
-// temp route for map development purposes for Behzad
-app.get("/users/:username/:mapid", (req, res) => {
-  let mapData = {};
-  let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
-
-    .asCallback(function (err, rows) {
-    if (err) throw err;
-    mapData = rows[0];
-    knex('coordinates').where('map_id', rows[0].id)
-    .asCallback(function (err, rows) {
-      if (err) throw err;
-      pointsData = rows;
-      let dataTemplate = {
-          mapData: mapData,
-          pointsData: pointsData
-      };
-      dataTemplate = JSON.stringify(dataTemplate);
-      res.render('editMap', {data: dataTemplate});
-    });
-  });
-
-});
-
-
-app.post("/users/:username/edit", (req, res) => {
-  console.log('Editing map....');
-  let map_id = tempMapId;
-  let mapTemplate = {
-    centre_x: req.body.mapCentreLat,
-    centre_y: req.body.mapCentreLng,
-    user_id: null,
-    zoom: req.body.mapZoom,
-    region: 'a region edited',
-    keyword: 'a keyword edited'
-  };
-
-  let mapPoints = req.body.mapPoints;
-
-  knex('maps').where('id', map_id).update(mapTemplate).then((resp) => {
-    knex('coordinates').where('map_id', map_id).del().then((resp) => {
-      mapPoints.forEach((point) => {
-        let pointTemplate = {
-          lng: point.lng,
-          lat: point.lat,
-          map_id: map_id,
-          name: "edited name",
-          description: "edited description",
-          img_url: 'eidted url'
-        };
-        knex('coordinates').insert(pointTemplate).asCallback(function (err, row) {
-          if (err) throw err;
-        });
-      });
-    });
-  });
-});
-
-
-
-//         +---------------------+
-//         |  user registration  |
-//         +---------------------+
 app.get("/register", (req, res) => {
   res.render("register");
 });
@@ -257,10 +126,9 @@ app.post("/register", (req, res) => {
   }
 });
 
-
-//         +------------------+
-//         |  login & logout  |
-//         +------------------+
+//         +------------------------+
+//         |     login & logout     |
+//         +------------------------+
 
 app.get("/", (req, res) => {
   res.render("login");
@@ -270,17 +138,20 @@ app.post("/", (req, res) => {
   const input = req.body
   var usernameFound    = "";
   var passwordFound    = "";
+  var current_user     = "";
 
   knex.select('*').from('users').where('username', input.username).asCallback(function (err, rows) {
     if (err) throw err;
     if (rows.length !== 0) {
       usernameFound = rows[0].username;
       passwordFound = rows[0].password;
+      current_user  = rows[0]
       if (input.username === usernameFound) {
         console.log("email found in the db");
         bcrypt.compare(input.password, passwordFound, (err, passwordMatch) => {
           if (passwordMatch) {
-            req.session.username = input.username;
+            // console.log("current_user: ", current_user)
+            req.session.current_user = current_user;
             res.redirect(`/users/${input.username}`);
             return;
           } else {
@@ -299,8 +170,219 @@ app.post("/", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  req.session.username = undefined;
+  req.session.current_user = undefined;
   res.redirect("/")
+});
+
+
+//         +-------------------------+
+//         |     create map page     |
+//         +-------------------------+
+
+app.get("/users/:username/create", (req, res) => {
+  res.render("createNewMap");
+});
+
+app.post("/users/:username/create", (req, res) => {
+
+  if (!req.body) {
+    res.status(400).json({ error: 'invalid request: no data in POST body'});
+    return;
+  }
+
+  let mapData = {
+    mapTemplate: [{
+
+      user_id: req.session.current_user.id,
+      centre_x: req.body.mapCentreLat,
+      centre_y: req.body.mapCentreLng,
+      zoom: req.body.mapZoom,
+      region: 'a region',
+      title: req.body.mapTitle
+    }],
+    coordinatesData: req.body.mapPoints
+  }
+console.log("mapData: ", mapData);
+  dataHelpers.saveMaps(mapData, (err) => {
+    if (err) {
+      res.status(500).json({ err: err.message });
+    } else {
+      res.status(201).send();
+    }
+  })
+
+});
+
+
+
+
+
+
+
+
+// temp reoute for development purposes for Behzad
+app.get("/listMaps", (req, res) => {
+  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
+    if (err) throw err;
+    res.render("listMaps", {data: rows});
+    console.log(rows);
+  });
+});
+
+
+
+
+
+
+
+//         +--------------------------+
+//         |Fixes url fron info window|
+//         +--------------------------+
+
+
+function fixURL(originalURL) {
+  if (!(originalURL.includes("://"))) {
+    originalURL = "http://" + originalURL;
+  }
+  return originalURL;
+}
+
+
+
+
+
+//         +---------------------+
+//         |   DEVELOPMENT EDIT  |
+//         +---------------------+
+// temp route for map development purposes for Behzad
+app.get("/wipeDatabase", (req, res) => {
+  emptyDataTables('coordinates');
+  emptyDataTables('maps');
+});
+
+app.get("/users/:username/:mapid", (req, res) => {
+  let mapData = {};
+  let pointsData = {};
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
+
+    .asCallback(function (err, rows) {
+    if (err) throw err;
+    mapData = rows[0];
+    knex('coordinates').where('map_id', rows[0].id)
+    .asCallback(function (err, rows) {
+      if (err) throw err;
+      pointsData = rows;
+      let dataTemplate = {
+          mapData: mapData,
+          pointsData: pointsData
+      };
+      dataTemplate = JSON.stringify(dataTemplate);
+      res.render('editMap', {data: dataTemplate});
+    });
+  });
+
+});
+
+
+app.post("/users/:username/edit", (req, res) => {
+  console.log('Editing map....');
+  let map_id = tempMapId;
+  let mapTemplate = {
+    centre_x: req.body.mapCentreLat,
+    centre_y: req.body.mapCentreLng,
+    user_id: null,
+    zoom: req.body.mapZoom,
+    region: 'a region edited',
+    title: req.body.mapTitle
+  };
+
+  let mapPoints = req.body.mapPoints;
+
+  knex('maps').where('id', map_id).update(mapTemplate).then((resp) => {
+    knex('coordinates').where('map_id', map_id).del().then((resp) => {
+      mapPoints.forEach((point) => {
+        let pointTemplate = {
+          lng: point.lng,
+          lat: point.lat,
+          map_id: map_id,
+          name: "edited name",
+          description: "edited description",
+          img_url: 'eidted url'
+        };
+        knex('coordinates').insert(pointTemplate).asCallback(function (err, row) {
+          if (err) throw err;
+        });
+      });
+    });
+  });
+
+});
+
+
+// temp route for map development purposes for Behzad
+app.get("/renderMap", (req, res) => {
+  let mapData = {};
+  let pointsData = {};
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', 66)
+
+    .asCallback(function (err, rows) {
+    if (err) throw err;
+    mapData = rows[0];
+    knex('coordinates').where('map_id', rows[0].id)
+    .asCallback(function (err, rows) {
+      if (err) throw err;
+      pointsData = rows;
+      let dataTemplate = {
+          mapData: mapData,
+          pointsData: pointsData
+      };
+      dataTemplate = JSON.stringify(dataTemplate);
+      res.render('renderMap', {data: dataTemplate});
+    });
+  });
+
+});
+
+// temp reoute for development purposes for Behzad
+app.get("/listMaps", (req, res) => {
+  knex('maps').select('id', 'title').asCallback((err, rows) => {
+    if (err) throw err;
+    //console.log(rows);
+    res.render("listMaps", {data: rows});
+  });
+
+});
+
+app.get("/users/:username/create", (req, res) => {
+  res.render("createNewMap");
+});
+
+
+app.post("/users/:username/create", (req, res) => {
+
+  if (!req.body) {
+    res.status(400).json({ error: 'invalid request: no data in POST body'});
+    return;
+  }
+
+  let mapData = {
+    mapTemplate: [{
+      user_id: null,
+      centre_x: req.body.mapCenterLng,
+      centre_y: req.body.mapCenterLat,
+      zoom: req.body.mapZoom
+    }],
+    coordinatesData: req.body.mapPoints
+  }
+  console.log("mapData: ", mapData);
+  dataHelpers.saveMaps(mapData, (err) => {
+    if (err) {
+      res.status(500).json({ err: err.message });
+    } else {
+      res.status(201).send();
+    }
+  })
+
 });
 
 
@@ -315,6 +397,7 @@ app.get("/users/:username", (req, res) => {
   let mapData = {};
   let pointsData = {};
   knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
+
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
@@ -331,9 +414,8 @@ app.get("/users/:username", (req, res) => {
     });
   });
 
-
-
 });
+
 
 // edit post
 app.post("/users/:username/:mapid", (req, res) => {

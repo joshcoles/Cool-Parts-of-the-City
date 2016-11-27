@@ -9,8 +9,6 @@
 
     let reqData = `username = ${req.params.username}`
 
-
-
     dataHelpers.getCoordinates(reqData, (err, coordinates) => {
       if(err) {
         res.status(500).json({ error: err.message });
@@ -22,27 +20,28 @@
 
 
   coordinatesRoutes.post("/users/:username/create", (req, res) => {
-    if (!req.body) {
-      res.status(400).json({ error: 'invalid request: no data in POST body'});
-      return;
-    }
 
-    let mapData = {
-      mapTemplate: [{
-        center_x: req.body.mapCenterLng,
-        center_y: req.body.mapCenterLat,
-        zoom: req.body.mapZoom
-      }],
-      coordinatesData: req.body.mapPoints
-    }
+  if (!req.body) {
+    res.status(400).json({ error: 'invalid request: no data in POST body'});
+    return;
+  }
 
-    dataHelpers.saveMaps(mapData, (err) => {
-      if (err) {
-        res.status(500).json({ err: err.message });
-      } else {
-        res.status(201).send();
-      }
-    })
+  let mapData = {
+    mapTemplate: [{
+      center_x: req.body.mapCenterLng,
+      center_y: req.body.mapCenterLat,
+      zoom: req.body.mapZoom
+    }],
+    coordinatesData: req.body.mapPoints
+  }
+
+  dataHelpers.saveMaps(mapData, (err) => {
+    if (err) {
+      res.status(500).json({ err: err.message });
+    } else {
+      res.status(201).send();
+    }
+  })
 
   });
 
