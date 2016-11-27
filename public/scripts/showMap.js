@@ -42,14 +42,24 @@ function insertPointsOnMap (myMap, point) {
       content: markerOptions.id
     }
 
-    var marker = new google.maps.Marker(markerOptions);
-    marker.setMap(myMap);
+    function markerClicked() {
+      $(function(){
+        $("#point-info-div").slideToggle(100);
+      });
+    }
 
-    // var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
 
-    // google.maps.event.addListener(marker,'click', function() {
-    //   infoWindow.open(myMap, marker);
-    // });
+    var thisMarker = new google.maps.Marker(markerOptions);
+    thisMarker.setMap(myMap);
 
-    return marker;
+    google.maps.event.addListener(thisMarker, 'click', markerClicked);
+
+
+    return thisMarker;
 }
+
+
+
+
+
+
