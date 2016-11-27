@@ -1,34 +1,33 @@
 $(function () {
   function listMaps() {
+    // $.post('/listMapss', '135', function () {console.log('success')} );
     let listOfMaps = window.data;
     let displayBox = $("#displayBox");
 
-    listOfMaps.forEach((item) => {
-      // console.log(item);
-      // let listItem = $('<li>').text(`${item.id} --> ${item.title}`);
-      // displayBox.append(listItem);
-
-      // let mapListElement = createNewMapListElm;
-
-
-
+    displayBox.on('click', '.mapListButtons', function (event) {
+      event.preventDefault();
+      console.log(this.getAttribute('data-button'));
+      $.ajax({
+        type: 'POST',
+        url: '/listMaps',
+        data: {mapId: this.getAttribute('data-button')},
+        success: function (response) {
+          console.log('success');
+          if (response.redirect) {window.location.href = response.redirect;}
+        }
+      });
 
     });
+
+    listOfMaps.forEach((item) => {
+      let $button = $(`
+        <button class='mapListButtons' type='button' data-button=${item.id}>${item.title}</button><br>
+        `);
+      displayBox.append($button);
+    });
   }
-
-
-
-
-
-
-
-
   listMaps();
 });
 
-// <form id="myform" method="post" action="target.html">
-//   <input type="hidden" name="name" value="value" />
-//   <a onclick="document.getElementById('myform').submit();">click here</a>
-// </form>
 
 

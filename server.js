@@ -24,8 +24,7 @@ app.use(session({
 }));
 
 
-const tempMapId = 135;
-
+var tempMapId = 134;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -201,7 +200,7 @@ app.post("/users/:username/create", (req, res) => {
     }],
     coordinatesData: req.body.mapPoints
   }
-
+console.log("mapData: ", mapData);
   dataHelpers.saveMaps(mapData, (err) => {
     if (err) {
       res.status(500).json({ err: err.message });
@@ -222,8 +221,15 @@ app.get("/listMaps", (req, res) => {
   knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
     if (err) throw err;
     res.render("listMaps", {data: rows});
-    // console.log(rows);
+    console.log(rows);
   });
+});
+
+
+app.post("/listMaps", (req, res) => {
+  console.log("HERE: ", typeof(tempMapId));
+  tempMapId = req.body.mapId;
+  res.send({redirect: `/users/behzad`});
 });
 
 
@@ -312,11 +318,11 @@ app.post("/users/:username/:mapid", (req, res) => {
 });
 
 
-// // temp route for map development purposes for Behzad
-// app.get("/showMap", (req, res) => {
+// temp route for map development purposes for Behzad
+// app.get("/renderMap", (req, res) => {
 //   let mapData = {};
 //   let pointsData = {};
-//   knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
+//   knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', 66)
 
 //     .asCallback(function (err, rows) {
 //     if (err) throw err;
@@ -330,7 +336,7 @@ app.post("/users/:username/:mapid", (req, res) => {
 //           pointsData: pointsData
 //       };
 //       dataTemplate = JSON.stringify(dataTemplate);
-//       res.render('showMap', {data: dataTemplate});
+//       res.render('renderMap', {data: dataTemplate});
 //     });
 //   });
 
@@ -347,25 +353,24 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('user_id', req.session.current_user.id)
-
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
-    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, coordinates) {
+    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
       if (err) throw err;
-      pointsData = coordinates;
-      var data = JSON.stringify({mapData: mapData, pointsData: pointsData})
+      pointsData = rows;
       let dataTemplate = {
-          mapRows: rows,
-          data: data
+          mapData: mapData,
+          pointsData: pointsData
       };
-      // dataTemplate = JSON.stringify(dataTemplate);
-      res.render('user-homepage', dataTemplate);
+      dataTemplate = JSON.stringify(dataTemplate);
+      res.render('user-homepage', {data: dataTemplate});
     });
   });
-
 });
+
+
 
 
 app.listen(PORT, () => {
