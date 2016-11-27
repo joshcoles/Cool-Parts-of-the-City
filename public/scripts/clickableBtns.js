@@ -77,9 +77,11 @@ function conditionMapData (markerArr) {
 
     if (!marker.infoBox) {
       outBool = false;
+      console.log('XXX');
     } else if (marker.infoBox.title === "" || marker.infoBox.description === "" || marker.infoBox.url === "") {
       outBool = false;
-    } else { requestMarkers[index].infoBox = marker.infoBox; }
+      console.log('YYY');
+    } else { requestMarkers[index].infoBox = marker.infoBox; console.log('ZZZ');}
   });
   return {outBool: outBool, outArr: requestMarkers}
 }

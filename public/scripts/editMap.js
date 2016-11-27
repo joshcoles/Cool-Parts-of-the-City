@@ -10,6 +10,7 @@ function editMap(){
 
 function drawMap (data) {
   let mapData = data.mapData;
+  document.querySelector('#mapTitleInput').value = mapData.title;
   let pointsData = data.pointsData;
 
   let mapOptions = {
@@ -22,6 +23,11 @@ function drawMap (data) {
 
   pointsData.forEach(function (point) {
     let thisMarker = marker(point.lat, point.lng, map, point.name, point.description, point.img_url);
+    thisMarker['infoBox'] = {
+      title: point.name,
+      description: point.description,
+      url: point.img_url
+    };
     markerArr.push(thisMarker);
   });
 
@@ -30,7 +36,6 @@ function drawMap (data) {
   map.addListener('click', function(e) {
     let thisMarker = marker(e.latLng.lat(), e.latLng.lng(), map, true);
     markerArr.push(thisMarker);
-
   });
 
   autoCompleteSearch(map);
