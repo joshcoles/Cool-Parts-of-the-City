@@ -213,12 +213,10 @@ console.log("mapData: ", mapData);
 
 
 
+//     +---------------------------+
+//     |     list maps UNDER DEV   |
+//     +---------------------------+
 
-
-
-
-
-// temp reoute for development purposes for Behzad
 app.get("/listMaps", (req, res) => {
   knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
     if (err) throw err;
@@ -230,13 +228,9 @@ app.get("/listMaps", (req, res) => {
 
 
 
-
-
-
 //         +--------------------------+
 //         |Fixes url fron info window|
 //         +--------------------------+
-
 
 function fixURL(originalURL) {
   if (!(originalURL.includes("://"))) {
@@ -282,7 +276,7 @@ app.get("/users/:username/:mapid", (req, res) => {
 });
 
 
-app.post("/users/:username/edit", (req, res) => {
+app.post("/users/:username/:mapid", (req, res) => {
   console.log('Editing map....');
   let map_id = tempMapId;
   let mapTemplate = {
@@ -341,55 +335,13 @@ app.get("/renderMap", (req, res) => {
 
 });
 
-// temp reoute for development purposes for Behzad
-app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'title').asCallback((err, rows) => {
-    if (err) throw err;
-    //console.log(rows);
-    res.render("listMaps", {data: rows});
-  });
-
-});
-
-app.get("/users/:username/create", (req, res) => {
-  res.render("createNewMap");
-});
-
-
-app.post("/users/:username/create", (req, res) => {
-
-  if (!req.body) {
-    res.status(400).json({ error: 'invalid request: no data in POST body'});
-    return;
-  }
-
-  let mapData = {
-    mapTemplate: [{
-      user_id: null,
-      centre_x: req.body.mapCenterLng,
-      centre_y: req.body.mapCenterLat,
-      zoom: req.body.mapZoom
-    }],
-    coordinatesData: req.body.mapPoints
-  }
-  console.log("mapData: ", mapData);
-  dataHelpers.saveMaps(mapData, (err) => {
-    if (err) {
-      res.status(500).json({ err: err.message });
-    } else {
-      res.status(201).send();
-    }
-  })
-
-});
-
 
 // users page
 app.get("/users", (req, res) => {
 
 });
 
-// user page
+// user page UNDER DEVELOPMENT
 app.get("/users/:username", (req, res) => {
 
   let mapData = {};
@@ -412,17 +364,6 @@ app.get("/users/:username", (req, res) => {
 });
 
 
-// edit post
-app.post("/users/:username/:mapid", (req, res) => {
-
-});
-
-
-app.post("/markers", (req, res) => {
-  // Create.marker(res.body)
-
-  res.send({sent: 'from server'});
-});
 
 
 app.listen(PORT, () => {
