@@ -24,8 +24,7 @@ app.use(session({
 }));
 
 
-
-const tempMapId = 129;
+const tempMapId = 135;
 
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
@@ -62,19 +61,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-app.use(function(req, res, next) {
-  console.log("Authorizing...");
-  console.log("My req.url: " + req.url);
-  if(!WHITELISTED_PAGES.includes(req.url)) {
-    const authorized = req.session.current_user
-    if(!authorized) {
-      res.redirect("/")
-    }
-  }
-    console.log("I'm working!");
-    next();
-});
+// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+// app.use(function(req, res, next) {
+//   console.log("Authorizing...");
+//   console.log("My req.url: " + req.url);
+//   if(!WHITELISTED_PAGES.includes(req.url)) {
+//     const authorized = req.session.current_user
+//     if(!authorized) {
+//       res.redirect("/")
+//     }
+//   }
+//     console.log("I'm working!");
+//     next();
+// });
 
 
 // ========================================== //
@@ -215,12 +214,10 @@ console.log("mapData: ", mapData);
 
 
 
+//     +---------------------------+
+//     |     list maps UNDER DEV   |
+//     +---------------------------+
 
-
-
-
-
-// temp reoute for development purposes for Behzad
 app.get("/listMaps", (req, res) => {
   knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
     if (err) throw err;
@@ -232,13 +229,9 @@ app.get("/listMaps", (req, res) => {
 
 
 
-
-
-
 //         +--------------------------+
 //         |Fixes url fron info window|
 //         +--------------------------+
-
 
 function fixURL(originalURL) {
   if (!(originalURL.includes("://"))) {
@@ -284,7 +277,7 @@ app.get("/users/:username/:mapid", (req, res) => {
 });
 
 
-app.post("/users/:username/edit", (req, res) => {
+app.post("/users/:username/:mapid", (req, res) => {
   console.log('Editing map....');
   let map_id = tempMapId;
   let mapTemplate = {
@@ -343,55 +336,13 @@ app.get("/renderMap", (req, res) => {
 
 });
 
-// temp reoute for development purposes for Behzad
-app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'title').asCallback((err, rows) => {
-    if (err) throw err;
-    //console.log(rows);
-    res.render("listMaps", {data: rows});
-  });
-
-});
-
-app.get("/users/:username/create", (req, res) => {
-  res.render("createNewMap");
-});
-
-
-app.post("/users/:username/create", (req, res) => {
-
-  if (!req.body) {
-    res.status(400).json({ error: 'invalid request: no data in POST body'});
-    return;
-  }
-
-  let mapData = {
-    mapTemplate: [{
-      user_id: null,
-      centre_x: req.body.mapCenterLng,
-      centre_y: req.body.mapCenterLat,
-      zoom: req.body.mapZoom
-    }],
-    coordinatesData: req.body.mapPoints
-  }
-  console.log("mapData: ", mapData);
-  dataHelpers.saveMaps(mapData, (err) => {
-    if (err) {
-      res.status(500).json({ err: err.message });
-    } else {
-      res.status(201).send();
-    }
-  })
-
-});
-
 
 // users page
 app.get("/users", (req, res) => {
 
 });
 
-// user page
+// user page UNDER DEVELOPMENT
 app.get("/users/:username", (req, res) => {
 
   let mapData = {};
@@ -417,17 +368,6 @@ app.get("/users/:username", (req, res) => {
 });
 
 
-// edit post
-app.post("/users/:username/:mapid", (req, res) => {
-
-});
-
-
-app.post("/markers", (req, res) => {
-  // Create.marker(res.body)
-
-  res.send({sent: 'from server'});
-});
 
 
 app.listen(PORT, () => {
@@ -444,24 +384,3 @@ function emptyDataTables (dataTable) {
     });
   });
 }
-
-
-
-
-
-// app.get("/users/:username/create", (req, res) => {
-//   res.render('createNewMap');
-//   //console.log(req.body);
-// });
-
-// app.post("/users/:username/create", (req, res) => {
-//   console.log(req.body);
-// });
-
-//app.use("/users/behzad/create", coordinatesRoutes);
-
-
-
-// const dataHelper = require("./lib/util/data-helpers.js")(req.body);
-// dataHelper.saveMaps(req.);
-// const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
