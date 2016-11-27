@@ -16,3 +16,9 @@ html, body {
 #map .info-window-form  #pano{
   display: block;
 }
+
+.point-info-div {
+background-color: #577492;
+color: white;
+border-radius: 5px;
+}
