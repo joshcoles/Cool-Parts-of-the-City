@@ -232,7 +232,7 @@ app.post("/users/:username/create", (req, res) => {
       centre_y: req.body.mapCentreLng,
       zoom: req.body.mapZoom,
       region: 'a region',
-      keyword: 'a keyword'
+      title: req.body.title
     }],
     coordinatesData: req.body.mapPoints
   }
