@@ -3,8 +3,6 @@ $(function () {
   let newMapBtn = $('.mapDataChangeBtn');
   let mapTitleInput = $('#mapTitleInput');
 
-
-
   newMapBtn.on('click', function (event) {
     let requestMarkers = conditionMapData(markerArr).outArr;
     let goodData = conditionMapData(markerArr).outBool;
@@ -27,6 +25,25 @@ $(function () {
       });
     } else alert ("Please fill in the map title and info-box info for each point");
   });
+
+  // $('#xxx').on('click', '.submitInfoBox', function(e) {
+  //   e.preventDefault();
+  //   console.log("being clicked: ", thisMarker);
+  //   let $form = $(this).parent();
+  //   let formData = {
+  //     title: $form.find('input[name="title"]').val(),
+  //     description: $form.find('input[name="description"]').val(),
+  //     url: $form.find('input[name="url"]').val()
+  //   };
+
+
+  //   indexInmarkerArr = searchForMarker(infoWindow.anchor);
+  //   if (indexInmarkerArr > -1) {
+  //     markerArr[indexInmarkerArr]['infoBox'] = formData;
+  //   }
+  //   closeAllGoddamnInfoWindows();
+  // });
+
 
 });
 

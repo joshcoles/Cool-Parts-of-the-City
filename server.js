@@ -24,7 +24,7 @@ app.use(session({
 }));
 
 
-var tempMapId = 148;
+var tempMapId = 149;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -60,19 +60,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-app.use(function(req, res, next) {
-  console.log("Authorizing...");
-  console.log("My req.url: " + req.url);
-  if(!WHITELISTED_PAGES.includes(req.url)) {
-    const authorized = req.session.current_user
-    if(!authorized) {
-      res.redirect("/")
-    }
-  }
-    console.log("I'm working!");
-    next();
-});
+// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+// app.use(function(req, res, next) {
+//   console.log("Authorizing...");
+//   console.log("My req.url: " + req.url);
+//   if(!WHITELISTED_PAGES.includes(req.url)) {
+//     const authorized = req.session.current_user
+//     if(!authorized) {
+//       res.redirect("/")
+//     }
+//   }
+//     console.log("I'm working!");
+//     next();
+// });
 
 
 // ========================================== //
@@ -289,56 +289,12 @@ app.post("/users/:username/:mapid", (req, res) => {
       });
     });
   });
-
-});
-
-
-// temp route for map development purposes for Behzad
-// app.get("/renderMap", (req, res) => {
-//   let mapData = {};
-//   let pointsData = {};
-//   knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', 66)
-
-//     .asCallback(function (err, rows) {
-//     if (err) throw err;
-//     mapData = rows[0];
-//     knex('coordinates').where('map_id', rows[0].id)
-//     .asCallback(function (err, rows) {
-//       if (err) throw err;
-//       pointsData = rows;
-//       let dataTemplate = {
-//           mapData: mapData,
-//           pointsData: pointsData
-//       };
-//       dataTemplate = JSON.stringify(dataTemplate);
-//       res.render('renderMap', {data: dataTemplate});
-//     });
-//   });
-
-// });
-
-
-// users page
-app.get("/users", (req, res) => {
-
-
-
-
-
 });
 
 
 //     +---------------------------+
 //     |     list maps UNDER DEV   |
 //     +---------------------------+
-
-// app.get("/listMaps", (req, res) => {
-//   knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
-//     if (err) throw err;
-//     res.render("listMaps", {data: rows});
-//     console.log(rows);
-//   });
-// });
 
 app.post("/listMaps", (req, res) => {
   console.log("HERE: ", typeof(tempMapId));
@@ -363,8 +319,6 @@ app.get("/users/:username", (req, res) => {
     list = rows;
   });
 
-  console.log(list);
-
 
   knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId).andWhere('user_id', req.session.current_user.id)
     .asCallback(function (err, rows) {
@@ -385,33 +339,7 @@ app.get("/users/:username", (req, res) => {
     });
   });
 
-
-
-
-
-
-
-
-// let reqData = {
-//       whereData: [{
-//         where1st: "user_id",
-//         where2nd: req.session.current_user.id
-//       }]
-//     }
-//     dataHelpers.getMaps(reqData, (err, coordinates) => {
-//       if(err) {
-//         res.status(500).json({ error: err.message });
-//       } else {
-//         console.log(req.body);
-//         res.render('renderMap', { data: dataTemplate });
-//       }
-//     ;
-//     });
-
-
 });
-
-
 
 
 app.listen(PORT, () => {

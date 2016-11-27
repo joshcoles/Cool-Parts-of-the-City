@@ -12,7 +12,7 @@ function createNewMap () {
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
   map.addListener('click', function(e) {
-    let thisMarker = marker(e.latLng.lat(), e.latLng.lng(), map);
+    let thisMarker = marker(e.latLng.lat(), e.latLng.lng(), map, true);
     markerArr.push(thisMarker);
   });
 

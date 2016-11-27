@@ -1,7 +1,6 @@
 $(function () {
   function listMaps() {
     // $.post('/listMapss', '135', function () {console.log('success')} );
-    console.log(typeof(window.data));
     let data = JSON.parse(window.data);
     let listOfMaps = data.list;
     //console.log(listOfMaps);
@@ -24,10 +23,7 @@ $(function () {
 
     listOfMaps.forEach((item) => {
       let $button = $(`
-
-
-        <a href="#" class="list-group-item mapListButtons" type='button' data-button=${item.id}>${item.title}</a>
-        `);
+        <a href="#" class="list-group-item mapListButtons" type="button" data-button=${item.id}>${item.title}</a>`);
       displayBox.append($button);
     });
   }
