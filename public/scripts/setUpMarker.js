@@ -60,6 +60,7 @@ function marker(lat, lng, map) {
       if (indexInmarkerArr > -1) {
         markerArr[indexInmarkerArr]['infoBox'] = formData;
       }
+      closeAllGoddamnInfoWindows();
     });
   }
 
