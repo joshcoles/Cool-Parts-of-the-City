@@ -275,13 +275,14 @@ app.post("/users/:username/:mapid", (req, res) => {
   knex('maps').where('id', map_id).update(mapTemplate).then((resp) => {
     knex('coordinates').where('map_id', map_id).del().then((resp) => {
       mapPoints.forEach((point) => {
+        console.log(point);
         let pointTemplate = {
           lng: point.lng,
           lat: point.lat,
           map_id: map_id,
-          name: "edited name",
-          description: "edited description",
-          img_url: 'eidted url'
+          name: point.infoBox.title,
+          description: point.infoBox.description,
+          img_url: point.infoBox.url
         };
         knex('coordinates').insert(pointTemplate).asCallback(function (err, row) {
           if (err) throw err;

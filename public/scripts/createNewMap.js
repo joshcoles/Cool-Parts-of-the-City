@@ -1,6 +1,7 @@
 let map = {};
 let markerArr = [];
 let postRoute = '/users/:username/create';
+let action = 'newMap';
 
 function createNewMap () {
   let mapOptions = {
