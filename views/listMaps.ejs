@@ -27,24 +27,6 @@
 
   <container id="displayBox"></container>
 
-  <div id="street-view" style="height: 300px; width: 300px;"></div>
-    <script>
-      var panorama;
-      function initialize() {
-        panorama = new google.maps.StreetViewPanorama(
-            document.getElementById('street-view'),
-            {
-              position: {lat: 49.2776612, lng: -123.1081074},
-              pov: {heading: 165, pitch: 0},
-              zoom: 1
-            });
-      }
-    </script>
-    <script async defer
-         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=initialize">
-    </script>
-
-
 </body>
 </html>
 

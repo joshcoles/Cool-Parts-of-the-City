@@ -25,7 +25,7 @@ $(function () {
           console.log('SUCCESS');
         }
       });
-    } else alert ("WTF!");
+    } else alert ("Please fill in the map title and info-box info for each point");
   });
 
 });
