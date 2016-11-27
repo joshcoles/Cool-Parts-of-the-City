@@ -2,10 +2,9 @@
   <div class="container">
     <% if (current_user) { %>
       <form action="/logout" method="POST" >
-        <a href="/users/:id">
+        <a href="/users/qwer">
           <button type="button" class="btn btn-default navbar-btn ">My Maps</button>
         </a>
-
         <a href="/users/<%= current_user.username %>/create">
           <button type="button" class="btn btn-default navbar-btn ">Create</button>
         </a>
@@ -15,9 +14,9 @@
       </form>
 
     <% } else { %>
-      <button type="button" class="btn btn-default navbar-btn navbar-right">
-        <a href="/">Sign In</a>
-      </button>
+      <a href="/">
+        <button type="button" class="btn btn-default navbar-btn navbar-right">Sign In</button>
+      </a>
     <% } %>
 
   </div>

@@ -8,20 +8,29 @@
       var data = <%- JSON.stringify(data) %>;
       window.data = data;
   </script>
-
   <script src="/scripts/showMap.js"></script>
   <script src="/scripts/clickableBtns.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=showMap"
   async defer"></script>
 
+
+<!-- working with dataTemplate.pointsData -->
+
+
   <div class="container">
     <div class="container">
       <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-          <h4>Choose a map</h4>
+          <h4>My Maps</h4>
           <div class="list-group">
-            <a href="#" class="list-group-item active">All Maps</a>
-            <a href="#" class="list-group-item">My Maps</a>
+            <div class="list-group">
+
+              <% mapRows.forEach(function(row) { %>
+                <% console.log(row) %>
+              <a href="#" class="list-group-item"><%= row.title %></a>
+
+              <% }) %>
+            </div>
           </div>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
@@ -32,5 +41,16 @@
     </div>
   </div>
 </html>
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -25,6 +25,7 @@ app.use(session({
 
 
 const tempMapId = 135;
+
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -346,21 +347,24 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('user_id', req.session.current_user.id)
+
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
-    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
+    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, coordinates) {
       if (err) throw err;
-      pointsData = rows;
+      pointsData = coordinates;
+      var data = JSON.stringify({mapData: mapData, pointsData: pointsData})
       let dataTemplate = {
-          mapData: mapData,
-          pointsData: pointsData
+          mapRows: rows,
+          data: data
       };
-      dataTemplate = JSON.stringify(dataTemplate);
-      res.render('user-homepage', {data: dataTemplate});
+      // dataTemplate = JSON.stringify(dataTemplate);
+      res.render('user-homepage', dataTemplate);
     });
   });
+
 });
 
 
