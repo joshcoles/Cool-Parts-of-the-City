@@ -60,19 +60,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-// app.use(function(req, res, next) {
-//   console.log("Authorizing...");
-//   console.log("My req.url: " + req.url);
-//   if(!WHITELISTED_PAGES.includes(req.url)) {
-//     const authorized = req.session.current_user
-//     if(!authorized) {
-//       res.redirect("/")
-//     }
-//   }
-//     console.log("I'm working!");
-//     next();
-// });
+const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+app.use(function(req, res, next) {
+  console.log("Authorizing...");
+  console.log("My req.url: " + req.url);
+  if(!WHITELISTED_PAGES.includes(req.url)) {
+    const authorized = req.session.current_user
+    if(!authorized) {
+      res.redirect("/")
+    }
+  }
+    console.log("I'm working!");
+    next();
+});
 
 
 // ========================================== //
@@ -346,10 +346,32 @@ app.post("/users/:username/:mapid", (req, res) => {
 // users page
 app.get("/users", (req, res) => {
 
+
+
+
+
 });
 
 // user page UNDER DEVELOPMENT
 app.get("/users/:username", (req, res) => {
+
+// let reqData = {
+//       whereData: [{
+//         where1st: "user_id",
+//         where2nd: req.session.current_user.id
+//       }]
+//     }
+//     dataHelpers.getMaps(reqData, (err, coordinates) => {
+//       if(err) {
+//         res.status(500).json({ error: err.message });
+//       } else {
+//         console.log(req.body);
+//         res.render('renderMap', { data: dataTemplate });
+//       }
+//     ;
+//     });
+
+
 
   let mapData = {};
   let pointsData = {};
