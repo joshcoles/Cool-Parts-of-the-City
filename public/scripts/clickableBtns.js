@@ -11,6 +11,8 @@ $(function () {
       mapPoints: conditionMapData (markerArr)
     }
 
+    console.log(templateVars);
+
     $.ajax({
       type: 'POST',
       url: postRoute,

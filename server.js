@@ -24,7 +24,7 @@ app.use(session({
 }));
 
 
-const tempMapId = 113;
+const tempMapId = 129;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -60,19 +60,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-app.use(function(req, res, next) {
-  console.log("Authorizing...");
-  console.log("My req.url: " + req.url);
-  if(!WHITELISTED_PAGES.includes(req.url)) {
-    const authorized = req.session.username
-    if(!authorized) {
-      res.redirect("/")
-    }
-  }
-    console.log("I'm working!");
-    next();
-});
+// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+// app.use(function(req, res, next) {
+//   console.log("Authorizing...");
+//   console.log("My req.url: " + req.url);
+//   if(!WHITELISTED_PAGES.includes(req.url)) {
+//     const authorized = req.session.username
+//     if(!authorized) {
+//       res.redirect("/")
+//     }
+//   }
+//     console.log("I'm working!");
+//     next();
+// });
 
 
 // ======================================================
@@ -227,8 +227,8 @@ app.post("/users/:username/create", (req, res) => {
   let mapData = {
     mapTemplate: [{
       user_id: null,
-      centre_x: req.body.mapCenterLng,
-      centre_y: req.body.mapCenterLat,
+      centre_x: req.body.mapCentreLat,
+      centre_y: req.body.mapCentreLng,
       zoom: req.body.mapZoom,
       region: 'a region',
       keyword: 'a keyword'
@@ -251,6 +251,11 @@ console.log("mapData: ", mapData);
 //         |   DEVELOPMENT EDIT  |
 //         +---------------------+
 // temp route for map development purposes for Behzad
+app.get("/wipeDatabase", (req, res) => {
+  emptyDataTables('coordinates');
+  emptyDataTables('maps');
+});
+
 app.get("/users/:username/:mapid", (req, res) => {
   let mapData = {};
   let pointsData = {};
