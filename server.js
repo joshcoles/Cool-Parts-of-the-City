@@ -40,8 +40,8 @@ const tempMapId = 129;
 app.use((req, res, next) => {
 
   res.locals.current_user = null;
-  if (req.session.username) {
-    knex.select('*').from('users').where('username', req.session.username).asCallback(function(err, rows) {
+  if (req.session.current_user) {
+    knex.select('*').from('users').where('username', req.session.current_user.username).asCallback(function(err, rows) {
       if (err) {
         console.log(err);
         next();
@@ -60,19 +60,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-// app.use(function(req, res, next) {
-//   console.log("Authorizing...");
-//   console.log("My req.url: " + req.url);
-//   if(!WHITELISTED_PAGES.includes(req.url)) {
-//     const authorized = req.session.username
-//     if(!authorized) {
-//       res.redirect("/")
-//     }
-//   }
-//     console.log("I'm working!");
-//     next();
-// });
+const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+app.use(function(req, res, next) {
+  console.log("Authorizing...");
+  console.log("My req.url: " + req.url);
+  if(!WHITELISTED_PAGES.includes(req.url)) {
+    const authorized = req.session.current_user
+    if(!authorized) {
+      res.redirect("/")
+    }
+  }
+    console.log("I'm working!");
+    next();
+});
 
 
 // ======================================================
@@ -136,17 +136,20 @@ app.post("/", (req, res) => {
   const input = req.body
   var usernameFound    = "";
   var passwordFound    = "";
+  var current_user     = "";
 
   knex.select('*').from('users').where('username', input.username).asCallback(function (err, rows) {
     if (err) throw err;
     if (rows.length !== 0) {
       usernameFound = rows[0].username;
       passwordFound = rows[0].password;
+      current_user  = rows[0]
       if (input.username === usernameFound) {
         console.log("email found in the db");
         bcrypt.compare(input.password, passwordFound, (err, passwordMatch) => {
           if (passwordMatch) {
-            req.session.username = input.username;
+            // console.log("current_user: ", current_user)
+            req.session.current_user = current_user;
             res.redirect(`/users/${input.username}`);
             return;
           } else {
@@ -165,7 +168,7 @@ app.post("/", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  req.session.username = undefined;
+  req.session.current_user = undefined;
   res.redirect("/")
 });
 
@@ -207,15 +210,13 @@ function fixURL(originalURL) {
 
 
 
-//         +---------------------+
-//         |CREATE GET AND POST |
-//         +---------------------+
+//         +-------------------------+
+//         |     create map page     |
+//         +-------------------------+
 
 app.get("/users/:username/create", (req, res) => {
   res.render("createNewMap");
 });
-
-
 
 app.post("/users/:username/create", (req, res) => {
 
@@ -226,7 +227,8 @@ app.post("/users/:username/create", (req, res) => {
 
   let mapData = {
     mapTemplate: [{
-      user_id: null,
+
+      user_id: req.session.current_user.id,
       centre_x: req.body.mapCentreLat,
       centre_y: req.body.mapCentreLng,
       zoom: req.body.mapZoom,
