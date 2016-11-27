@@ -346,7 +346,7 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
