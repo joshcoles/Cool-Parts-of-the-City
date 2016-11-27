@@ -177,7 +177,7 @@ app.post("/logout", (req, res) => {
 
 // temp reoute for development purposes for Behzad
 app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'keyword', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
+  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
     if (err) throw err;
     res.render("listMaps", {data: rows});
     console.log(rows);
@@ -231,7 +231,7 @@ app.post("/users/:username/create", (req, res) => {
       centre_y: req.body.mapCentreLng,
       zoom: req.body.mapZoom,
       region: 'a region',
-      keyword: 'a keyword'
+      title: req.body.mapTitle
     }],
     coordinatesData: req.body.mapPoints
   }
@@ -259,7 +259,7 @@ app.get("/wipeDatabase", (req, res) => {
 app.get("/users/:username/:mapid", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', tempMapId)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
 
     .asCallback(function (err, rows) {
     if (err) throw err;
@@ -289,7 +289,7 @@ app.post("/users/:username/edit", (req, res) => {
     user_id: null,
     zoom: req.body.mapZoom,
     region: 'a region edited',
-    keyword: 'a keyword edited'
+    title: req.body.mapTitle
   };
 
   let mapPoints = req.body.mapPoints;
@@ -319,7 +319,7 @@ app.post("/users/:username/edit", (req, res) => {
 app.get("/renderMap", (req, res) => {
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'keyword').where('id', 66)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', 66)
 
     .asCallback(function (err, rows) {
     if (err) throw err;
@@ -341,7 +341,7 @@ app.get("/renderMap", (req, res) => {
 
 // temp reoute for development purposes for Behzad
 app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'keyword').asCallback((err, rows) => {
+  knex('maps').select('id', 'title').asCallback((err, rows) => {
     if (err) throw err;
     //console.log(rows);
     res.render("listMaps", {data: rows});
@@ -392,7 +392,7 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','keyword').where('id', tempMapId)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId)
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
@@ -407,8 +407,6 @@ app.get("/users/:username", (req, res) => {
       res.render('user-homepage', {data: dataTemplate});
     });
   });
-
-
 });
 
 
