@@ -396,14 +396,14 @@ app.get("/users/:username", (req, res) => {
 
   let mapData = {};
   let pointsData = {};
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('id', tempMapId)
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom', 'title').where('user_id', req.session.current_user.id)
 
     .asCallback(function (err, rows) {
     if (err) throw err;
     mapData = rows[0];
-    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
+    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, coordinates) {
       if (err) throw err;
-      pointsData = rows;
+      pointsData = coordinates;
       var data = JSON.stringify({mapData: mapData, pointsData: pointsData})
       let dataTemplate = {
           mapRows: rows,

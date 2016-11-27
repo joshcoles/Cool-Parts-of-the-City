@@ -24,8 +24,9 @@
           <h4>My Maps</h4>
           <div class="list-group">
             <div class="list-group">
-              <% mapRows.forEach(function(row) { %>
 
+              <% mapRows.forEach(function(row) { %>
+                <% console.log(row) %>
               <a href="#" class="list-group-item"><%= row.title %></a>
 
               <% }) %>
