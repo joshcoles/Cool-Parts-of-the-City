@@ -60,19 +60,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-// app.use(function(req, res, next) {
-//   console.log("Authorizing...");
-//   console.log("My req.url: " + req.url);
-//   if(!WHITELISTED_PAGES.includes(req.url)) {
-//     const authorized = req.session.current_user
-//     if(!authorized) {
-//       res.redirect("/")
-//     }
-//   }
-//     console.log("I'm working!");
-//     next();
-// });
+const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+app.use(function(req, res, next) {
+  console.log("Authorizing...");
+  console.log("My req.url: " + req.url);
+  if(!WHITELISTED_PAGES.includes(req.url)) {
+    const authorized = req.session.current_user
+    if(!authorized) {
+      res.redirect("/")
+    }
+  }
+    console.log("I'm working!");
+    next();
+});
 
 
 // ========================================== //
@@ -332,13 +332,13 @@ app.get("/users", (req, res) => {
 //     |     list maps UNDER DEV   |
 //     +---------------------------+
 
-app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
-    if (err) throw err;
-    res.render("listMaps", {data: rows});
-    console.log(rows);
-  });
-});
+// app.get("/listMaps", (req, res) => {
+//   knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
+//     if (err) throw err;
+//     res.render("listMaps", {data: rows});
+//     console.log(rows);
+//   });
+// });
 
 app.post("/listMaps", (req, res) => {
   console.log("HERE: ", typeof(tempMapId));
@@ -350,6 +350,47 @@ app.post("/listMaps", (req, res) => {
 
 // user page UNDER DEVELOPMENT
 app.get("/users/:username", (req, res) => {
+
+
+  let mapData = {};
+  let pointsData = {};
+  let dataTemplate = {};
+  let list;
+
+  knex('maps').select('id', 'title').where('user_id', req.session.current_user.id).asCallback((err, rows) => {
+    if (err) throw err;
+    console.log(rows);
+    list = rows;
+  });
+
+  console.log(list);
+
+
+  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId).andWhere('user_id', req.session.current_user.id)
+    .asCallback(function (err, rows) {
+    if (err) throw err;
+    mapData = rows[0];
+
+    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
+      if (err) throw err;
+      pointsData = rows;
+      let dataTemplate = {
+          mapData: mapData,
+          pointsData: pointsData,
+          list: list
+      };
+      console.log(dataTemplate);
+      dataTemplate = JSON.stringify(dataTemplate);
+      res.render('user-homepage', {data: dataTemplate});
+    });
+  });
+
+
+
+
+
+
+
 
 // let reqData = {
 //       whereData: [{
@@ -368,38 +409,6 @@ app.get("/users/:username", (req, res) => {
 //     });
 
 
-
-  let mapData = {};
-  let pointsData = {};
-  let dataTemplate = {};
-  let list;
-
-  knex('maps').select('id', 'title').where('user_id', 1).asCallback((err, rows) => {
-    if (err) throw err;
-    console.log(rows);
-    list = rows;
-  });
-
-
-
-  knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId).andWhere('user_id', 1)
-    .asCallback(function (err, rows) {
-    if (err) throw err;
-    mapData = rows[0];
-
-    knex('coordinates').where('map_id', rows[0].id).asCallback(function (err, rows) {
-      if (err) throw err;
-      pointsData = rows;
-      let dataTemplate = {
-          mapData: mapData,
-          pointsData: pointsData,
-          list: list
-      };
-      console.log(dataTemplate);
-      dataTemplate = JSON.stringify(dataTemplate);
-      res.render('user-homepage', {data: dataTemplate});
-    });
-  });
 });
 
 

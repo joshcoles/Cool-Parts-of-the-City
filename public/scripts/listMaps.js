@@ -24,13 +24,17 @@ $(function () {
 
     listOfMaps.forEach((item) => {
       let $button = $(`
-        <button class='mapListButtons' type='button' data-button=${item.id}>${item.title}</button><br>
+
+
+        <a href="#" class="list-group-item mapListButtons" type='button' data-button=${item.id}>${item.title}</a>
         `);
       displayBox.append($button);
     });
   }
   listMaps();
 });
+
+ //<button class='mapListButtons' type='button' data-button=${item.id}>${item.title}</button><br>
 
 
 
