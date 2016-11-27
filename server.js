@@ -440,23 +440,3 @@ function emptyDataTables (dataTable) {
   });
 }
 
-
-
-
-
-// app.get("/users/:username/create", (req, res) => {
-//   res.render('createNewMap');
-//   //console.log(req.body);
-// });
-
-// app.post("/users/:username/create", (req, res) => {
-//   console.log(req.body);
-// });
-
-//app.use("/users/behzad/create", coordinatesRoutes);
-
-
-
-// const dataHelper = require("./lib/util/data-helpers.js")(req.body);
-// dataHelper.saveMaps(req.);
-// const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
