@@ -75,7 +75,7 @@ app.use(function(req, res, next) {
 });
 
 
-// ======================================================
+// ========================================== //
 
 //         +-----------------------+
 //         |   user registration   |
@@ -173,43 +173,6 @@ app.post("/logout", (req, res) => {
 });
 
 
-
-
-
-
-
-// temp reoute for development purposes for Behzad
-app.get("/listMaps", (req, res) => {
-  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
-    if (err) throw err;
-    res.render("listMaps", {data: rows});
-    console.log(rows);
-  });
-});
-
-
-
-
-
-
-
-//         +--------------------------+
-//         |Fixes url fron info window|
-//         +--------------------------+
-
-
-function fixURL(originalURL) {
-  if (!(originalURL.includes("://"))) {
-    originalURL = "http://" + originalURL;
-  }
-  return originalURL;
-}
-
-
-
-
-
-
 //         +-------------------------+
 //         |     create map page     |
 //         +-------------------------+
@@ -247,6 +210,43 @@ console.log("mapData: ", mapData);
   })
 
 });
+
+
+
+
+
+
+
+
+// temp reoute for development purposes for Behzad
+app.get("/listMaps", (req, res) => {
+  knex('maps').select('id', 'title', 'centre_x', 'centre_y', 'zoom').asCallback((err, rows) => {
+    if (err) throw err;
+    res.render("listMaps", {data: rows});
+    console.log(rows);
+  });
+});
+
+
+
+
+
+
+
+//         +--------------------------+
+//         |Fixes url fron info window|
+//         +--------------------------+
+
+
+function fixURL(originalURL) {
+  if (!(originalURL.includes("://"))) {
+    originalURL = "http://" + originalURL;
+  }
+  return originalURL;
+}
+
+
+
 
 
 //         +---------------------+
