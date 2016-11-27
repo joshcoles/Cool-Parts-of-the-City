@@ -24,7 +24,7 @@ app.use(session({
 }));
 
 
-var tempMapId = 149;
+var tempMapId = 148;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
