@@ -60,19 +60,19 @@ app.use((req, res, next) => {
 //     |     whitelist page middleware     |
 //     +-----------------------------------+
 
-const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
-app.use(function(req, res, next) {
-  console.log("Authorizing...");
-  console.log("My req.url: " + req.url);
-  if(!WHITELISTED_PAGES.includes(req.url)) {
-    const authorized = req.session.current_user
-    if(!authorized) {
-      res.redirect("/")
-    }
-  }
-    console.log("I'm working!");
-    next();
-});
+// const WHITELISTED_PAGES = ["/", "/register", "/login", "/users", "/users/:username", "/users/:username/:mapid"]
+// app.use(function(req, res, next) {
+//   console.log("Authorizing...");
+//   console.log("My req.url: " + req.url);
+//   if(!WHITELISTED_PAGES.includes(req.url)) {
+//     const authorized = req.session.current_user
+//     if(!authorized) {
+//       res.redirect("/")
+//     }
+//   }
+//     console.log("I'm working!");
+//     next();
+// });
 
 
 // ========================================== //
@@ -439,24 +439,3 @@ function emptyDataTables (dataTable) {
     });
   });
 }
-
-
-
-
-
-// app.get("/users/:username/create", (req, res) => {
-//   res.render('createNewMap');
-//   //console.log(req.body);
-// });
-
-// app.post("/users/:username/create", (req, res) => {
-//   console.log(req.body);
-// });
-
-//app.use("/users/behzad/create", coordinatesRoutes);
-
-
-
-// const dataHelper = require("./lib/util/data-helpers.js")(req.body);
-// dataHelper.saveMaps(req.);
-// const coordinatesRoutes = require("./routes/coordinates.js")(dataHelper);
