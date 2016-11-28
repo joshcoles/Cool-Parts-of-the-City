@@ -5,8 +5,8 @@
   <% include ./partials/_header %>
   <div class="container">
     <div class="jumbotron">
-      <h1 class="display-3">Sign in, baby!</h1>
-      <p class="lead">We'll let you look at some maps, but if you want to make your own you'll need to sign in.</p>
+      <h1 class="display-3">Cool Parts of the City</h1>
+      <p class="lead">Sign in to show us some parts.</p>
       <div class="container">
         <form action="/" method="POST">
           <div class="form-group row">
@@ -21,15 +21,17 @@
               <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="Password">
             </div>
           </div>
-          <button type="submit" class="button btn-success btn-md" role="button">Login</button>
+          <button type="submit" class="button btn-success btn-md col-sm-2 pull-right" role="button">Login</button>
         </form>
-        <div class="container">
+
+        <!-- <div class="container">
           <div class="row">
             <p>Not a registered member yet? You'll need to <a href="/register">register</a> first.</p>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
+    <p class="pull-right">Not a registered member yet? You'll need to <a href="/register">register</a> first.</p>
   </div>
 </body>
 </html>
