@@ -34,7 +34,7 @@ function drawMap (data) {
   console.log("length of marker array: ", markerArr.length);
 
   map.addListener('click', function(e) {
-    let thisMarker = marker(e.latLng.lat(), e.latLng.lng(), map, true);
+    let thisMarker = marker(e.latLng.lat(), e.latLng.lng(), map);
     markerArr.push(thisMarker);
   });
 

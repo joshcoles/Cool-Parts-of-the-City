@@ -30,14 +30,10 @@ function marker(lat, lng, map, name, description, url) {
     allMyGoddamnInfoWindows.push(infoWindow);
     if (action === 'newMap') {infoWindow.open(map, thisMarker);}
 
-
-
-    if (action === 'editMap') {
-      $form.querySelector('#info-window-form-name').value = name;
-      $form.querySelector('#info-window-form-description').value = description;
-      $form.querySelector('#info-window-form-url').value = url;
-      $form.querySelector('#updateBoxBtn').value = 'Update';
-    }
+    $form.querySelector('#info-window-form-name').value = name || "";
+    $form.querySelector('#info-window-form-description').value = description || "";
+    $form.querySelector('#info-window-form-url').value = url || "";
+    $form.querySelector('#updateBoxBtn').value = 'Update';
 
     google.maps.event.addListener(thisMarker, 'click', markerClicked);
 
