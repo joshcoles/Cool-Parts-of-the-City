@@ -24,7 +24,7 @@ app.use(session({
 }));
 
 
-var tempMapId = 148;
+var tempMapId;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -151,10 +151,13 @@ app.post("/", (req, res) => {
             // console.log("current_user: ", current_user)
             req.session.current_user = current_user;
             knex('maps').where('user_id', current_user.id).asCallback((err, rows) => {
+              console.log("IDDDDDDD-BEFORE: ", tempMapId);
               tempMapId = rows[0].id;
+              console.log("IDDDDDDD-AFTER: ", tempMapId);
+              res.redirect(`/users/${input.username}`);
+              return;
             });
-            res.redirect(`/users/${input.username}`);
-            return;
+
           } else {
             console.log("wrong password");
             res.status(401).send("Invalid username or password");
