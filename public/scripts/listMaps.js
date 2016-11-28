@@ -1,3 +1,5 @@
+currentMapId = 148;
+
 $(function () {
   function listMaps() {
     // $.post('/listMapss', '135', function () {console.log('success')} );
@@ -8,6 +10,7 @@ $(function () {
 
     displayBox.on('click', '.mapListButtons', function (event) {
       event.preventDefault();
+      currentMapId = this.getAttribute('data-button');
       //console.log(this.getAttribute('data-button'));
       $.ajax({
         type: 'POST',
