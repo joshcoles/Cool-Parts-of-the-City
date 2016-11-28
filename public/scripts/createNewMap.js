@@ -8,6 +8,25 @@ function createNewMap () {
     center: new google.maps.LatLng(49.28, -123.11),
     zoom: 14,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
+
+  };
+
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+  map.addListener('click', function(e) {
+    let thisMarker = marker(e.latLng.lat(), e.latLng.lng(), map, true);
+    markerArr.push(thisMarker);
+  });
+
+  autoCompleteSearch(map);
+
+  return map;
+}
+
+
+
+
+
 //     styles: [
 //   {
 //     "elementType": "geometry",
@@ -203,16 +222,3 @@ function createNewMap () {
 //     ]
 //   }
 // ]
-  };
-
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-  map.addListener('click', function(e) {
-    let thisMarker = marker(e.latLng.lat(), e.latLng.lng(), map, true);
-    markerArr.push(thisMarker);
-  });
-
-  autoCompleteSearch(map);
-
-  return map;
-}

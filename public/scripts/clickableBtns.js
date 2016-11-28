@@ -2,6 +2,7 @@ $(function () {
   // action for when compose is clicked
   let newMapBtn = $('.mapDataChangeBtn');
   let mapTitleInput = $('#mapTitleInput');
+  let editThisMapBtn = $('#editThisMapBtn');
 
   newMapBtn.on('click', function (event) {
     let requestMarkers = conditionMapData(markerArr).outArr;
@@ -67,6 +68,18 @@ $(function () {
     closeAllGoddamnInfoWindows();
   });
 
+
+  editThisMapBtn.on('click', function (event) {
+    console.log(currentMapId);
+    $.ajax({
+        type: 'POST',
+        url: '/editCurrentMap',
+        success: function (response) {
+          console.log('success');
+          if (response.redirect) {window.location.href = response.redirect;}
+        }
+      });
+  });
 
 });
 

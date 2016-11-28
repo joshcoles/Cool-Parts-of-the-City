@@ -150,6 +150,9 @@ app.post("/", (req, res) => {
           if (passwordMatch) {
             // console.log("current_user: ", current_user)
             req.session.current_user = current_user;
+            knex('maps').where('user_id', current_user.id).asCallback((err, rows) => {
+              tempMapId = rows[0].id;
+            });
             res.redirect(`/users/${input.username}`);
             return;
           } else {
@@ -264,7 +267,7 @@ app.post("/users/:username/:mapid", (req, res) => {
   let mapTemplate = {
     centre_x: req.body.mapCentreLat,
     centre_y: req.body.mapCentreLng,
-    user_id: null,
+    user_id: req.session.current_user.id,
     zoom: req.body.mapZoom,
     region: 'a region edited',
     title: req.body.mapTitle
@@ -286,6 +289,7 @@ app.post("/users/:username/:mapid", (req, res) => {
         };
         knex('coordinates').insert(pointTemplate).asCallback(function (err, row) {
           if (err) throw err;
+          // res.redirect(`/users/${req.session.current_user.username}`);
         });
       });
     });
@@ -300,7 +304,11 @@ app.post("/users/:username/:mapid", (req, res) => {
 app.post("/listMaps", (req, res) => {
   console.log("HERE: ", typeof(tempMapId));
   tempMapId = req.body.mapId;
-  res.send({redirect: `/users/behzad`});
+  res.send({redirect: `/users/${req.session.current_user.username}`});
+});
+
+app.post("/editCurrentMap", (req, res) => {
+  res.send({redirect: `/users/${req.session.current_user.username}/${tempMapId}`});
 });
 
 
