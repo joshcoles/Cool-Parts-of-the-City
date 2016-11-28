@@ -20,8 +20,9 @@ html, body {
 #point-info-div {
 background-color: #577492;
 color: white;
-border-radius: 5px;
+border-radius: 3px;
 display: none;
+
 }
 
 .point-info-div img {
@@ -32,7 +33,7 @@ display: none;
 
 .map-save-success {
   display: none;
-  border-radius: 5px;
+  border-radius: 3px;
   width: 400px;
   z-index: 10;
 }
@@ -62,7 +63,7 @@ display: none;
 #create-map-instructions {
   background-color: #577492;
   color: white;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 #editThisMapBtn {
@@ -73,3 +74,52 @@ display: none;
 #displayBox {
   text-align: center;
 }
+
+#register-prompt {
+  /*margin-right: -175px;*/
+}
+
+
+/*#map:hover {
+  -webkit-animation-name: spin;
+  -webkit-animation-duration: 4000ms;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: spin;
+  -moz-animation-duration: 4000ms;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+  -ms-animation-name: spin;
+  -ms-animation-duration: 4000ms;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-timing-function: linear;
+
+  animation-name: spin;
+  animation-duration: 4000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@-ms-keyframes spin {
+    from { -ms-transform: rotate(0deg); }
+    to { -ms-transform: rotate(360deg); }
+}
+
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}*/

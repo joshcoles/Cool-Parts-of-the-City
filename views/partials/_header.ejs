@@ -12,16 +12,25 @@
       <form action="/logout" method="POST" >
         <button type="submit" class="btn btn-default navbar-btn navbar-right btn-link btn-xs" id="sign-out-link">Sign Out</button>
         <a href="/users/<%= current_user.username %>/create">
-          <button type="button" class="btn btn-default navbar-btn navbar-left">Create</button>
+          <button type="button" class="btn btn-link navbar-btn navbar-left" id="navbarlinks">Create</button>
         </a>
         <a href="/users/qwer">
-          <button type="button" class="btn btn-default navbar-btn navbar-left">My Maps</button>
+          <button type="button" class="btn btn-link navbar-btn navbar-left" id="navbarlinks">My Maps</button>
         </a>
 
 
       </form>
 
     <% } else { %>
+      <a class="navbar-brand" href="#">
+        <img alt="Brand" src="/location-icon.png">
+      </a>
+
+
+      <a class="navbar-brand navbar-centre" href="#">Cool Parts of the City</a>
+
+
+
       <a href="/">
         <button type="button" class="btn btn-default navbar-btn btn-link navbar-right" id="sign-in-link">Sign In</button>
       </a>
