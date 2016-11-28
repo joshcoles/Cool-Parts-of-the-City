@@ -21,6 +21,7 @@ html, body {
 background-color: #577492;
 color: white;
 border-radius: 5px;
+display: none;
 }
 
 .point-info-div img {
