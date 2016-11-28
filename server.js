@@ -330,10 +330,8 @@ app.post("/editCurrentMap", (req, res) => {
 });
 
 
-
 // user page UNDER DEVELOPMENT
 app.get("/users/:username", (req, res) => {
-
 
   let mapData = {};
   let pointsData = {};
@@ -345,7 +343,6 @@ app.get("/users/:username", (req, res) => {
     console.log(rows);
     list = rows;
   });
-
 
   knex('maps').select('id', 'centre_x', 'centre_y', 'zoom','title').where('id', tempMapId).andWhere('user_id', req.session.current_user.id)
     .asCallback(function (err, rows) {
@@ -365,10 +362,7 @@ app.get("/users/:username", (req, res) => {
       res.render('user-homepage', {data: dataTemplate});
     });
   });
-
-
 });
-
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
