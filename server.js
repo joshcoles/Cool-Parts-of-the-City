@@ -24,7 +24,7 @@ app.use(session({
 }));
 
 
-var tempMapId;
+var tempMapId = 148;
 // This middleware prints details about each http request to the console. It works, but it also
 // prints one for every script request made, which for us means about 6 or 7. If we can find a way
 // to blacklist those scripts, we should implement it.
@@ -267,7 +267,7 @@ app.post("/users/:username/:mapid", (req, res) => {
   let mapTemplate = {
     centre_x: req.body.mapCentreLat,
     centre_y: req.body.mapCentreLng,
-    user_id: null,
+    user_id: req.session.current_user.id,
     zoom: req.body.mapZoom,
     region: 'a region edited',
     title: req.body.mapTitle
@@ -289,6 +289,7 @@ app.post("/users/:username/:mapid", (req, res) => {
         };
         knex('coordinates').insert(pointTemplate).asCallback(function (err, row) {
           if (err) throw err;
+          // res.redirect(`/users/${req.session.current_user.username}`);
         });
       });
     });
@@ -303,11 +304,11 @@ app.post("/users/:username/:mapid", (req, res) => {
 app.post("/listMaps", (req, res) => {
   console.log("HERE: ", typeof(tempMapId));
   tempMapId = req.body.mapId;
-  res.send({redirect: `/users/behzad`});
+  res.send({redirect: `/users/${req.session.current_user.username}`});
 });
 
 app.post("/editCurrentMap", (req, res) => {
-  res.send({redirect: `/users/behzad/${tempMapId}`});
+  res.send({redirect: `/users/${req.session.current_user.username}/${tempMapId}`});
 });
 
 
