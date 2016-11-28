@@ -6,6 +6,7 @@ $(function () {
   newMapBtn.on('click', function (event) {
     let requestMarkers = conditionMapData(markerArr).outArr;
     let goodData = conditionMapData(markerArr).outBool;
+    let $message = $('#map-save-success');
 
     if (action === 'editMap' && markerArr.length > 0) {
       templateVars = {
@@ -33,6 +34,9 @@ $(function () {
         mapZoom: map.getZoom(),
         mapPoints: requestMarkers
       }
+
+      $message.css({"display": "none"});
+      $message.fadeIn(400).delay(2000).fadeOut(400);
 
       $.ajax({
         type: 'POST',
