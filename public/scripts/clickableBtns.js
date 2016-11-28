@@ -1,15 +1,16 @@
 $(function () {
   // action for when compose is clicked
-  let newMapBtn = $('.mapDataChangeBtn');
+  let changeMapDataBtn = $('.mapDataChangeBtn');
   let mapTitleInput = $('#mapTitleInput');
   let editThisMapBtn = $('#editThisMapBtn');
+  let deleteMapBtn = $('#deleteMapBtn');
 
-  newMapBtn.on('click', function (event) {
+  changeMapDataBtn.on('click', function (event) {
     let requestMarkers = conditionMapData(markerArr).outArr;
     let goodData = conditionMapData(markerArr).outBool;
-    let $message = $('#map-save-success');
+    let $message = $('.map-save-success');
 
-    if (action === 'editMap' && markerArr.length > 0) {
+    if (mapTitleInput.val() !== "" && action === 'editMap' && markerArr.length > 0) {
       templateVars = {
         mapTitle: mapTitleInput.val(),
         mapCentreLat: map.getCenter().lat(),
@@ -17,6 +18,9 @@ $(function () {
         mapZoom: map.getZoom(),
         mapPoints: requestMarkers
       }
+
+      $message.css({"display": "none"});
+      $message.fadeIn(400).delay(2000).fadeOut(400);
 
       $.ajax({
         type: 'POST',
@@ -27,7 +31,7 @@ $(function () {
         }
       });
 
-    } else if (action === 'newMap' && markerArr.length > 0 && goodData) {
+    } else if (mapTitleInput.val() !== "" && action === 'newMap' && markerArr.length > 0 && goodData) {
       templateVars = {
         mapTitle: mapTitleInput.val(),
         mapCentreLat: map.getCenter().lat(),
@@ -68,12 +72,24 @@ $(function () {
     closeAllGoddamnInfoWindows();
   });
 
-
   editThisMapBtn.on('click', function (event) {
     console.log(currentMapId);
     $.ajax({
         type: 'POST',
         url: '/editCurrentMap',
+        success: function (response) {
+          console.log('success');
+          if (response.redirect) {window.location.href = response.redirect;}
+        }
+      });
+  });
+
+  deleteMapBtn.on('click', function (event) {
+    console.log('I am in delete map inside clickable button')
+    //console.log(currentMapId);
+    $.ajax({
+        type: 'POST',
+        url: '/deleteMap',
         success: function (response) {
           console.log('success');
           if (response.redirect) {window.location.href = response.redirect;}
@@ -102,10 +118,3 @@ function conditionMapData (markerArr) {
   });
   return {outBool: outBool, outArr: requestMarkers}
 }
-
-
-// requestMarkers[index].infoBox = {
-//           title: "yyy",
-//           description: "yyy",
-//           url: "yyy"
-//         }

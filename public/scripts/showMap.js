@@ -257,15 +257,27 @@ function insertPointsOnMap (myMap, point) {
       content: markerOptions.id
     }
 
-    function markerClicked() {
+    function markerClicked(event) {
       $(function(){
-        $("#point-info-div").slideToggle(100);
+        let infoBox = $("#point-info-div");
+        //infoBox.text(thisMarker.infoBox.title);
+        infoBox.css({'display': 'none'});
+        infoBox.find('h4').text(thisMarker.infoBox.title);
+        infoBox.find('p').text(thisMarker.infoBox.description);
+        infoBox.find('img').attr('src', thisMarker.infoBox.url);
+        //console.log(thisMarker.infoBox);
+        infoBox.slideDown(150);
       });
     }
 
 
     var thisMarker = new google.maps.Marker(markerOptions);
     thisMarker.setMap(myMap);
+    thisMarker.infoBox = {
+      title: point.name,
+      description: point.description,
+      url: point.img_url
+    };
 
     google.maps.event.addListener(thisMarker, 'click', markerClicked);
 
