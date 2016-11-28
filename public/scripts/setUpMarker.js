@@ -21,7 +21,6 @@ function marker(lat, lng, map, name, description, url) {
   const thisMarker = new google.maps.Marker(markerOptions);
   let infoWindow;
 
-
   function createMarker() {
     closeAllGoddamnInfoWindows();
     thisMarker.setMap(map);
@@ -29,7 +28,8 @@ function marker(lat, lng, map, name, description, url) {
     const infoWindowOptions = { content: $form };
     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
     allMyGoddamnInfoWindows.push(infoWindow);
-    infoWindow.open(map, thisMarker);
+    if (action === 'newMap') {infoWindow.open(map, thisMarker);}
+
 
 
     if (action === 'editMap') {

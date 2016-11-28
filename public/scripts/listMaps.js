@@ -1,4 +1,4 @@
-currentMapId = 148;
+var currentMapId;
 
 $(function () {
   function listMaps() {
