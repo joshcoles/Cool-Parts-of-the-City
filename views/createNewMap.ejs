@@ -10,19 +10,18 @@
     <script src="/scripts/clickableBtns.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyA9dM3-LJxJfuiirdbAnWU77oLdKexM5bo&callback=createNewMap"
     async defer"></script>
-  <!-- <div class="container"> -->
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <input class="form-control input-sm" type="text" id="autocomplete">
-    </div>
-  <!-- </div> -->
-  <div class="container">
 
-  <div class="container text-center jumbotron" id="map-save-success">
-    <p>Map successfully saved!</p>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <input class="form-control input-sm" type="text" id="autocomplete">
   </div>
 
-    <span class="info-window-form container form-group new-poi-form">
+  <div class="container">
 
+    <div class="container text-center jumbotron" id="map-save-success">
+      <p>Map successfully saved!</p>
+    </div>
+
+    <span class="info-window-form container form-group new-poi-form">
       <input class="form-control input-sm xx" id="info-window-form-name" type="text" name="title" placeholder="Title"><br>
       <input class="form-control input-sm yy" id="info-window-form-description" type="text" name="description" placeholder="A short description of this place."><br>
       <input class="form-control input-sm zz" id="info-window-form-url" type="text" name="url" placeholder="http://"><br>
@@ -34,27 +33,17 @@
       <div class="row">
 
           <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 point-info-div container" id="create-map-instructions">
-          <h3>Creating a map</h3>
-          <p><strong>Step 1.</strong> Click on a spot.</p>
-          <p><strong>Step 2.</strong> Type some stuff.</p>
-          <p><strong>Step 3.</strong> Click on 'Update'.</p>
-          <p><strong>Step 4.</strong> Smile.</p>
+          <h3>How to create a map.</h3>
+            <ol>
+          <li>Click on a spot.</li>
+          <li>Type some stuff.</li>
+          <li>Click on 'Update'.</li>
+          <li>Smile.</li>
+            <ol>
           </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-          <input class="form-control input-sm" type="text" id="mapTitleInput" placeholder="Enter maps's title here...">
+          <input class="form-control input-sm" type="text" id="mapTitleInput" placeholder="Give your map a title">
           <button class="mapDataChangeBtn button btn-success btn-md" type="button">Save Map</button>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">

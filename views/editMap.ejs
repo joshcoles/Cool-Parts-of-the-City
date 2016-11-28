@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <% include ./partials/_head %>
-
 <body>
   <% include ./partials/_header %>
   <script type="text/javascript" src="/vendor/jquery-3.1.1.min.js"></script>
@@ -17,15 +16,19 @@
   async defer"></script>
 
   <div>
-  <input class="form-control input-sm" type="text" id="mapTitleInput" placeholder="Enter maps's title here...">
+  <!-- <input class="form-contkrol input-sm" type="text" id="mapTitleInput" placeholder="Enter maps's title here..."> -->
     <input class="form-control input-sm" type="text" id="autocomplete">
-    <button class="mapDataChangeBtn button btn-success btn-md" type="button">Save Changes</button>
+    <!-- <button class="mapDataChangeBtn button btn-success btn-md" type="button">Save Changes</button> -->
   </div>
 
-  <div id="map"></div>
-  <div id="pano"></div>
+
 
   <div class="container">
+
+    <!-- <div class="container text-center jumbotron" id="map-save-success">
+      <p>Map successfully saved!</p>
+    </div> -->
+
     <span class="info-window-form container form-group new-poi-form">
       <input class="form-control input-sm xx" id="info-window-form-name" type="text" name="title" placeholder="Title"><br>
       <input class="form-control input-sm yy" id="info-window-form-description" type="text" name="description" placeholder="A short description of this place."><br>
@@ -37,15 +40,22 @@
     <div class="container">
       <div class="row">
 
-          <h4>Choose a map</h4>
-          <div class="list-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
-            <!-- <a href="#" class="list-group-item active">All Maps</a> -->
-            <a href="#" class="list-group-item">My Maps</a>
-            <!-- <a href="#" class="list-group-item">My Favs</a> -->
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 point-info-div container" id="create-map-instructions">
+          <h3>How to edit a map.</h3>
+            <ol>
+          <li>Click on a spot.</li>
+          <li>Type some stuff.</li>
+          <li>Click on 'Update'.</li>
+          <li>Smile.</li>
+            <ol>
           </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+          <input class="form-control input-sm" type="text" id="mapTitleInput" placeholder="Your map's title">
+          <button class="mapDataChangeBtn button btn-success btn-md" type="button">Save Map</button>
+        </div>
 
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-          <h4>Map</h4>
+          <!-- <h4>Map</h4> -->
           <div id="map"></div>
         </div>
       </div>

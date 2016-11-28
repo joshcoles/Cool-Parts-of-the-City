@@ -3,11 +3,11 @@
   border-color: #577492;
 }
 .navbar-default .navbar-brand {
-  color: #d4d8d1;
+  color: white;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-  color: #d4d8d1;
+  color: white;
 }
 .navbar-default .navbar-text {
   color: #d4d8d1;
