@@ -60,6 +60,7 @@ function marker(lat, lng, map, name, description, url) {
       $form.querySelector('#info-window-form-name').value = name;
       $form.querySelector('#info-window-form-description').value = description;
       $form.querySelector('#info-window-form-url').value = url;
+      $form.querySelector('#updateBoxBtn').value = 'Update';
     }
 
 
