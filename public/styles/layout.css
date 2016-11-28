@@ -45,7 +45,7 @@ border-radius: 5px;
 }
 
 #mapTitleInput {
-  max-width: 600px;
+  max-width: 755px;
   float: left;
   margin-bottom: 5px;
 }
@@ -64,6 +64,11 @@ border-radius: 5px;
   border-radius: 5px;
 }
 
-.navbar-btn {
-  display: inline-block;
+#editThisMapBtn {
+  margin-top: 5px;
+  margin-right: -15px;
+}
+
+#displayBox {
+  text-align: center;
 }
