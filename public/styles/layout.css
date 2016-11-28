@@ -39,3 +39,27 @@ border-radius: 5px;
 .jumbotron p {
   font-size: 27px;
 }
+
+#map-viewport {
+  display: inline-block;
+}
+
+#mapTitleInput {
+  max-width: 600px;
+  float: left;
+  margin-bottom: 5px;
+}
+
+.mapDataChangeBtn {
+  float: right;
+}
+
+#autocomplete {
+  display: none;
+}
+
+#create-map-instructions {
+  background-color: #577492;
+  color: white;
+  border-radius: 5px;
+}

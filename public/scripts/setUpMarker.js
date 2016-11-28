@@ -53,16 +53,29 @@ function marker(lat, lng, map, name, description, url) {
     const infoWindowOptions = { content: $form };
     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
     allMyGoddamnInfoWindows.push(infoWindow);
-    //infoWindow.open(map, thisMarker);
+    infoWindow.open(map, thisMarker);
 
 
-    google.maps.event.addListener(infoWindow, 'domready', () => {
-      //console.log("info window: ", $('infoWindow.content #info-window-form-name'));
-      document.getElementById("info-window-form-name").value = name;
-      document.getElementById("info-window-form-description").value = description;
-      document.getElementById("info-window-form-url").value = url;
+    if (action === 'editMap') {
+      $form.querySelector('#info-window-form-name').value = name;
+      $form.querySelector('#info-window-form-description').value = description;
+      $form.querySelector('#info-window-form-url').value = url;
+      $form.querySelector('#updateBoxBtn').value = 'Update';
+    }
 
-    });
+
+
+
+
+
+
+
+
+    // google.maps.event.addListener(infoWindow, 'domready', () => {
+    //   console.log("info window: ", $('infoWindow.content #info-window-form-name'));
+
+
+    // });
 
     google.maps.event.addListener(thisMarker, 'click', markerClicked);
     //google.maps.event.addListener(thisMarker, 'dragend', markerClicked);
