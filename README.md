@@ -1,6 +1,8 @@
-Welcome to Cool Parts Of The City! This was created as a midterm project for Lighthouse Labs, a web developement bootcamp in Vancouver in 2016.
+# Cool Parts of the City
 
-Users can create and view a collection of maps with various points-of-interest.
+This was created as a midterm project for Lighthouse Labs, a web developement bootcamp in Vancouver in 2016.
+
+Users can create and view a collection of maps with various points-of-interest. This was created for demo purposes only and is unfortunately not deployed anywhere currently.
 
 ![Alt text](https://raw.githubusercontent.com/joshcoles/Cool-Parts-of-the-City/master/Screenshots/login.png?raw=true "Login page.")
 
