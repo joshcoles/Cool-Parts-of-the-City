@@ -4,7 +4,7 @@ Users can create and view a collection of maps with various points-of-interest.
 
 ![Alt text](https://raw.githubusercontent.com/joshcoles/Cool-Parts-of-the-City/master/Screenshots/login.png?raw=true "Login page.")
 
-![Alt text](https://raw.githubusercontent.com/joshcoles/Cool-Parts-of-the-City/master/Screenshots/my-maps.png?raw=true "User homepage, aka 'My Maps'."")
+![Alt text](https://raw.githubusercontent.com/joshcoles/Cool-Parts-of-the-City/master/Screenshots/my-maps.png?raw=true "User homepage, aka 'My Maps'.")
 
 ![Alt text](https://raw.githubusercontent.com/joshcoles/Cool-Parts-of-the-City/master/Screenshots/create.png?raw=true "Create map.")
 
